@@ -1,0 +1,3 @@
+files:
+  - source: /language/zh-TW.json
+    translation: /language/%osx_locale%.json
