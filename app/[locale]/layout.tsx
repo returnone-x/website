@@ -1,7 +1,7 @@
 import {notFound} from 'next/navigation';
  
 // Can be imported from a shared config
-const locales = ['en', 'zh-tw'];
+const locales = ['en', 'zh-TW'];
  
 export default function LocaleLayout({children, params: {locale}}) {
   // Validate that the incoming `locale` parameter is valid
