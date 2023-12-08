@@ -1,3 +1,4 @@
+import { HeaderComponent } from "@/components/header/Header";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -16,7 +17,9 @@ export default function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body>{children}</body>
+      <body>
+        {children}
+      </body>
     </html>
   );
 }

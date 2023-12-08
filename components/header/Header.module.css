@@ -1,0 +1,24 @@
+.header {
+    margin-bottom: rem(120px);
+    background-color: var(--mantine-color-body);
+    border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  }
+
+.container {
+    padding: 10px 5px;
+}
+
+.textInput {
+  flex: 1;
+  max-width: 400px;
+}
+
+.centerHorizontal {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.flexone {
+  flex: 1;
+}
