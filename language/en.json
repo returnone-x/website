@@ -5,6 +5,15 @@
     "search": "Search",
     "blog": "BLOG",
     "about_us": "ABOUT US",
-    "ask": "ask"
+    "ask": "ask",
+    "username": "User name",
+    "password": "Password",
+    "email": "Email",
+    "typeusername": "Please type user name",
+    "typepassword": "Please type password",
+    "typeemail": "Please type email"
+  },
+  "Test": {
+    "test": "test"
   }
 }
