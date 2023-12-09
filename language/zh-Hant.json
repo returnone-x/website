@@ -1,0 +1,19 @@
+{
+  "Header": {
+    "signup": "註冊",
+    "login": "登入",
+    "search": "搜尋",
+    "blog": "BLOG",
+    "about_us": "關於我們",
+    "ask": "提問",
+    "username": "User name",
+    "password": "Password",
+    "email": "Email",
+    "typeusername": "Please type user name",
+    "typepassword": "Please type password",
+    "typeemail": "Please type email"
+  },
+  "Test": {
+    "test": "test"
+  }
+}
