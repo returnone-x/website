@@ -12,5 +12,8 @@
     "typeusername": "Please type user name",
     "typepassword": "Please type password",
     "typeemail": "Please type email"
+  },
+  "Test":{
+    "test": "test"
   }
 }
