@@ -1,3 +1,4 @@
+import { HeaderComponent } from "@/components/header/Header";
 import { notFound } from "next/navigation";
 import React from "react";
 
