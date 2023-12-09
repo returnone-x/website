@@ -35,9 +35,13 @@
   background-color: transparent;
 }
 
-.signup {
+.outlinebutton {
   color: light-dark(
     var(--mantine-color-white-10),
     var(--mantine-color-white-0)
   );
+}
+
+.modelPadding {
+  padding: 10px 20px;
 }

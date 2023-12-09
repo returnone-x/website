@@ -1,19 +1,24 @@
 {
   "Header": {
-    "signup": "Sign up",
-    "login": "Log in",
+    "signUp": "Sign up",
+    "logIn": "Log in",
     "search": "Search",
     "blog": "BLOG",
-    "about_us": "ABOUT US",
+    "aboutUs": "ABOUT US",
     "ask": "ask",
-    "username": "User name",
+    "userName": "User name",
     "password": "Password",
     "email": "Email",
-    "typeusername": "Please type user name",
-    "typepassword": "Please type password",
-    "typeemail": "Please type email"
-  },
-  "Test":{
-    "test": "test"
+    "typeUserName": "Please type user name",
+    "typePassword": "Please type password",
+    "typeEmail": "Please type email",
+    "signInToReturnone": "Welcome back to Returnone",
+    "signUpForReturnone": "Sign up for Returnone",
+    "iAgreeTerms": "I agree to the privacy-policy and Terms of Service",
+    "alreadyHaveAccount": "Aleady have a account?",
+    "noAccount": "No account?",
+    "createOne": "create one",
+    "orLoginWith": "or login with",
+    "orSignupWith": "or Sigh up with"
   }
 }

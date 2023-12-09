@@ -21,10 +21,22 @@ export function HeaderComponent() {
   const t = useTranslations("Header");
 
   const signipLoginTranslate = {
-    login: t("login"),
-    signup: t("signup"),
-    username: t("username"),
-    typeusername: t("typeusername")
+    logIn: t("logIn"),
+    signUp: t("signUp"),
+    userName: t("userName"),
+    password: t("password"),
+    email: t("email"),
+    typeUserName: t("typeUserName"),
+    typePassword: t("typePassword"),
+    typeEmail: t("typeEmail"),
+    signInToReturnone: t("signInToReturnone"),
+    signUpForReturnone: t("signUpForReturnone"),
+    iAgreeTerms: t("iAgreeTerms"),
+    alreadyHaveAccount: t("alreadyHaveAccount"),
+    noAccount: t("noAccount"),
+    createOne: t("createOne"),
+    orLoginWith: t("orLoginWith"),
+    orSignupWith: t("orSignupWith"),
   }
 
   return (
@@ -50,7 +62,7 @@ export function HeaderComponent() {
               className={classes.centerHorizontal}
               visibleFrom="sm"
             >
-              {t("about_us")}
+              {t("aboutUs")}
             </Text>
           </Group>
 
