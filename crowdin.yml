@@ -1,3 +1,3 @@
 files:
   - source: /language/en.json
-    translation: /language/%osx_locale%.json
+    translation: /language/%locale%.json
