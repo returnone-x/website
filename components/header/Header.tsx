@@ -15,9 +15,17 @@ import { HiOutlineSearch, HiOutlineQuestionMarkCircle } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import { SetTheme } from "./mode";
+import { SignupLogin } from "./auth";
 
 export function HeaderComponent() {
   const t = useTranslations("Header");
+
+  const signipLoginTranslate = {
+    login: t("login"),
+    signup: t("signup"),
+    username: t("username"),
+    typeusername: t("typeusername")
+  }
 
   return (
     <header className={classes.header}>
@@ -64,12 +72,9 @@ export function HeaderComponent() {
               {t("ask")}
             </Button>
             <Space w="xl" className={classes.flexone} visibleFrom="md" />
-            <Button variant="outline" radius="md" className={classes.signup}>
-              {t("login")}
-            </Button>
-            <Button variant="filled" radius="md" color="">
-              {t("signup")}
-            </Button>
+
+            <SignupLogin t={signipLoginTranslate} />
+
             <Space w="xl" className={classes.flexone} visibleFrom="md" />
             <ActionIcon
               variant="subtle"
