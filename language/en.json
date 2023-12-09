@@ -1,10 +1,10 @@
 {
-    "Header": {
-        "signup": "Sign up",
-        "login": "Log in",
-        "search": "Search",
-        "blog": "BLOG",
-        "about_us": "ABOUT US"
-    }
-    
+  "Header": {
+    "signup": "Sign up",
+    "login": "Log in",
+    "search": "Search",
+    "blog": "BLOG",
+    "about_us": "ABOUT US",
+    "ask": "ask"
+  }
 }

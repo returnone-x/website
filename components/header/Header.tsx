@@ -5,12 +5,20 @@ import {
   Button,
   TextInput,
   Space,
+  ActionIcon,
+  Anchor,
+  Box,
+  useMantineColorScheme,
 } from "@mantine/core";
 import classes from "./Header.module.css";
 import { HiOutlineSearch, HiOutlineQuestionMarkCircle } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
+import { useTranslations } from "next-intl";
+import { SetTheme } from "./mode";
 
-export async function HeaderComponent({ t }: { t: any }) {
+export function HeaderComponent() {
+  const t = useTranslations("Header");
+
   return (
     <header className={classes.header}>
       <Container size="1440px" className={classes.container}>
@@ -19,11 +27,21 @@ export async function HeaderComponent({ t }: { t: any }) {
             <Text fw={700} size="30px" className={classes.centerHorizontal}>
               returnone
             </Text>
-            <Space w="xl" className={classes.flexone}/>
-            <Text fw={700} size="md" className={classes.centerHorizontal}>
+            <Space w="xl" className={classes.flexone} visibleFrom="md" />
+            <Text
+              fw={700}
+              size="md"
+              className={classes.centerHorizontal}
+              visibleFrom="sm"
+            >
               {t("blog")}
             </Text>{" "}
-            <Text fw={700} size="md" className={classes.centerHorizontal}>
+            <Text
+              fw={700}
+              size="md"
+              className={classes.centerHorizontal}
+              visibleFrom="sm"
+            >
               {t("about_us")}
             </Text>
           </Group>
@@ -33,6 +51,7 @@ export async function HeaderComponent({ t }: { t: any }) {
             className={classes.textInput}
             radius="lg"
             rightSection={<HiOutlineSearch />}
+            visibleFrom="sm"
           />
           <Group justify="space-between" gap="sm">
             <Button
@@ -40,18 +59,27 @@ export async function HeaderComponent({ t }: { t: any }) {
               radius="md"
               variant="gradient"
               gradient={{ from: "#FFC37D", to: "#FF6B01", deg: 154 }}
+              visibleFrom="md"
             >
-              Ask
+              {t("ask")}
             </Button>
-            <Space w="xl" className={classes.flexone}/>
-            <Button variant="outline" radius="md">
+            <Space w="xl" className={classes.flexone} visibleFrom="md" />
+            <Button variant="outline" radius="md" className={classes.signup}>
               {t("login")}
             </Button>
             <Button variant="filled" radius="md" color="">
               {t("signup")}
             </Button>
-            <Space w="xl" className={classes.flexone}/>
-            <FaGithub size={35}></FaGithub>
+            <Space w="xl" className={classes.flexone} visibleFrom="md" />
+            <ActionIcon
+              variant="subtle"
+              aria-label="github"
+              visibleFrom="sm"
+              className={classes.icon}
+            >
+              <FaGithub size={25} className={classes.icon}></FaGithub>
+            </ActionIcon>
+            <SetTheme />
           </Group>
         </Group>
       </Container>
