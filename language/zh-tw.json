@@ -6,10 +6,11 @@
     "blog": "BLOG",
     "aboutUs": "關於我們",
     "ask": "提問",
-    "userName": "使用者名稱",
+    "username": "Username",
     "password": "密碼",
     "email": "電子郵件",
-    "typeUserName": "請輸入使用者名稱",
+    "confirmPassword": "Confirm password",
+    "typeUsername": "Please type username",
     "typePassword": "請輸入密碼",
     "typeEmail": "請輸入電子郵件",
     "signInToReturnone": "歡迎回來 Returnone",
@@ -19,6 +20,14 @@
     "noAccount": "沒有帳號?",
     "createOne": "立即註冊",
     "orLoginWith": "使用其他方式登入",
-    "orSignupWith": "使用其他方式註冊"
+    "orSignupWith": "使用其他方式註冊",
+    "invalidEmail": "Invalid email",
+    "passwordIsTooWeak": "Password is too weak",
+    "passwordDidNotMatch": "Password did not match",
+    "invalidUsername": "Username can only contain underscores(_), numbers and letters",
+    "usernameHasBeenUse": "This username has been use",
+    "emailHasBeenUse": "This email has already registering",
+    "anUnexpectedErrorOccurred": "An unexpected error occurred",
+    "pleaseTryAgainLater": "Please try again later"
   }
 }
