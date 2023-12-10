@@ -29,6 +29,7 @@ import { checkUsername } from "@/api/Auth/checkUsername";
 import { postSignUp } from "@/api/Auth/signup";
 import { notifications } from "@mantine/notifications";
 import { HiEmojiSad } from "react-icons/hi";
+import { apiUrl } from "@/config/config";
 
 // set t type
 type language = {
@@ -54,7 +55,7 @@ type language = {
   passwordDidNotMatch: string;
   invalidUsername: string;
   usernameHasBeenUse: string;
-  emailHasBeenUse: string;
+  emailIsBeenUse: string;
   anUnexpectedErrorOccurred: string;
   pleaseTryAgainLater: string;
   pleaseEnterAUsername: string;
@@ -190,7 +191,7 @@ export function SignupComponents({ t }: { t: language }) {
 
   // set username and this will delay 300ms (need rate the api)
   const [username] = useDebouncedValue(signupform.values.username, 300);
-  
+
   // if the username variable is change than check the username is been use or not
   const fetchCheckUsername = async () => {
     // username have no type then just set error to the UsernameError (Because I don't want the user to have an error without even typing anything)
@@ -233,7 +234,7 @@ export function SignupComponents({ t }: { t: language }) {
       signupform.reset();
     }
     if (res.data.message == "This email address is already in use") {
-      signupform.setErrors({ email: t.emailHasBeenUse });
+      signupform.setErrors({ email: t.emailIsBeenUse });
     }
     if (res.data.message == "This username is already in use") {
       signupform.setErrors({ email: t.usernameHasBeenUse });
@@ -250,7 +251,7 @@ export function SignupComponents({ t }: { t: language }) {
     }
     setLoading(false);
   };
-  
+
   return (
     <>
       <Button variant="filled" radius="md" onClick={signupOpen}>
@@ -311,17 +312,7 @@ export function SignupComponents({ t }: { t: language }) {
             />
             <Divider my="xs" labelPosition="center" label={t.orSignupWith} />
             <Group grow justify="space-between">
-              <Button
-                variant="outline"
-                radius="xl"
-                size="md"
-                disabled={loading}
-                className={classes.outlinebutton}
-              >
-                <FcGoogle />
-                <Space w="xs" />
-                Google
-              </Button>
+              <Google signupLoading={loading} />
               <Button
                 variant="outline"
                 radius="xl"
@@ -354,6 +345,44 @@ export function SignupComponents({ t }: { t: language }) {
           </Stack>
         </form>
       </Modal>
+    </>
+  );
+}
+
+export function Google({ signupLoading }: { signupLoading: boolean }) {
+  const handleOpenWindow = () => {
+    var screen_width = window.screen.width;
+    var screen_height = window.screen.height;
+    var left_position = (screen_width - 640) / 2;
+    var top_position = (screen_height - 668) / 2;
+    var window_features =
+      "width=640,height=668,left=" + left_position + ",top=" + top_position;
+    const popup = window.open(
+      apiUrl + "/auth/oauth/google",
+      "_blank",
+      window_features
+    );
+    if(popup) {
+      console.log("fuckyou");
+      popup.addEventListener("message", function (event) {
+        console.log("fuckfuckfuck");
+      });
+    }
+  };
+  return (
+    <>
+      <Button
+        variant="outline"
+        radius="xl"
+        size="md"
+        disabled={signupLoading}
+        className={classes.outlinebutton}
+        onClick={() => handleOpenWindow()}
+      >
+        <FcGoogle />
+        <Space w="xs" />
+        Google
+      </Button>
     </>
   );
 }

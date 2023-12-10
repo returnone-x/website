@@ -43,7 +43,7 @@ export function HeaderComponent() {
     passwordDidNotMatch: t("passwordDidNotMatch"),
     invalidUsername: t("invalidUsername"),
     usernameHasBeenUse: t("usernameHasBeenUse"),
-    emailHasBeenUse: t("emailHasBeenUse"),
+    emailIsBeenUse: t("emailIsBeenUse"),
     anUnexpectedErrorOccurred: t("anUnexpectedErrorOccurred"),
     pleaseTryAgainLater: t("pleaseTryAgainLater"),
     pleaseEnterAUsername: t("pleaseEnterAUsername")

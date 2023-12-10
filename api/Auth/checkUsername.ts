@@ -1,4 +1,4 @@
-import { backendUrl } from "@/config/config";
+import { apiUrl } from "@/config/config";
 import axios, { AxiosError } from "axios";
 
 export async function checkUsername(username: string) {
@@ -8,7 +8,7 @@ export async function checkUsername(username: string) {
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: backendUrl + "/auth/usernameexist",
+    url: apiUrl + "/auth/usernameexist",
     headers: {
       "Content-Type": "application/json",
     },
