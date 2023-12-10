@@ -23,10 +23,10 @@ export function HeaderComponent() {
   const signipLoginTranslate = {
     logIn: t("logIn"),
     signUp: t("signUp"),
-    userName: t("userName"),
+    username: t("username"),
     password: t("password"),
     email: t("email"),
-    typeUserName: t("typeUserName"),
+    typeUsername: t("typeUsername"),
     typePassword: t("typePassword"),
     typeEmail: t("typeEmail"),
     signInToReturnone: t("signInToReturnone"),
@@ -37,8 +37,17 @@ export function HeaderComponent() {
     createOne: t("createOne"),
     orLoginWith: t("orLoginWith"),
     orSignupWith: t("orSignupWith"),
+    confirmPassword: t("confirmPassword"),
+    invalidEmail: t("invalidEmail"),
+    passwordIsTooWeak: t("passwordIsTooWeak"),
+    passwordDidNotMatch: t("passwordDidNotMatch"),
+    invalidUsername: t("invalidUsername"),
+    usernameHasBeenUse: t("usernameHasBeenUse"),
+    emailHasBeenUse: t("emailHasBeenUse"),
+    anUnexpectedErrorOccurred: t("anUnexpectedErrorOccurred"),
+    pleaseTryAgainLater: t("pleaseTryAgainLater")
   }
-
+  
   return (
     <header className={classes.header}>
       <Container size="1440px" className={classes.container}>

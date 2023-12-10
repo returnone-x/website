@@ -5,6 +5,7 @@ import {
   ColorSchemeScript,
   CSSVariablesResolver,
 } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import "./globals.css";
 import { theme, resolver } from "@/themes/theme";
 
@@ -22,8 +23,9 @@ export default function RootLayout({
         <MantineProvider
           theme={theme}
           cssVariablesResolver={resolver}
-          defaultColorScheme="auto"
+          defaultColorScheme="dark"
         >
+          <Notifications />
           {children}
         </MantineProvider>
       </body>
