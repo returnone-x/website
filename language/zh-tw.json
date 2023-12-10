@@ -1,16 +1,24 @@
 {
   "Header": {
-    "signup": "Sign up",
-    "login": "Log in",
-    "search": "Search",
+    "signUp": "註冊",
+    "logIn": "登入",
+    "search": "搜尋",
     "blog": "BLOG",
-    "about_us": "ABOUT US",
-    "ask": "ask",
-    "username": "User name",
-    "password": "Password",
-    "email": "Email",
-    "typeusername": "Please type user name",
-    "typepassword": "Please type password",
-    "typeemail": "Please type email"
+    "aboutUs": "關於我們",
+    "ask": "提問",
+    "userName": "使用者名稱",
+    "password": "密碼",
+    "email": "電子郵件",
+    "typeUserName": "請輸入使用者名稱",
+    "typePassword": "請輸入密碼",
+    "typeEmail": "請輸入電子郵件",
+    "signInToReturnone": "歡迎回來 Returnone",
+    "signUpForReturnone": "立即註冊 Returnone",
+    "iAgreeTerms": "我同意隱私權政策與服務條款",
+    "alreadyHaveAccount": "已經有帳號了嗎?",
+    "noAccount": "沒有帳號?",
+    "createOne": "立即註冊",
+    "orLoginWith": "使用其他方式登入",
+    "orSignupWith": "使用其他方式註冊"
   }
 }
