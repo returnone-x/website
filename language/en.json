@@ -26,7 +26,7 @@
     "passwordDidNotMatch": "Password did not match",
     "invalidUsername": "Username can only contain underscores(_), numbers and letters",
     "usernameHasBeenUse": "This username has been use",
-    "emailHasBeenUse": "This email has already registering",
+    "emailIsBeenUse": "This email is already registering",
     "anUnexpectedErrorOccurred": "An unexpected error occurred",
     "pleaseTryAgainLater": "Please try again later"
   }
