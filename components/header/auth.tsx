@@ -30,6 +30,7 @@ import { postSignUp } from "@/api/Auth/signup";
 import { notifications } from "@mantine/notifications";
 import { HiEmojiSad } from "react-icons/hi";
 
+// set t type
 type language = {
   logIn: string;
   signUp: string;
@@ -56,10 +57,11 @@ type language = {
   emailHasBeenUse: string;
   anUnexpectedErrorOccurred: string;
   pleaseTryAgainLater: string;
+  pleaseEnterAUsername: string;
 };
 
+// whole components
 export function SignupLogin({ t }: { t: language }) {
-
   return (
     <>
       <LoginComponents t={t} />
@@ -68,19 +70,12 @@ export function SignupLogin({ t }: { t: language }) {
   );
 }
 
-
-
+// Login components
 export function LoginComponents({ t }: { t: language }) {
+  // set modal open and close
   const [loginOppened, { toggle: loginOpen, close: loginClose }] =
     useDisclosure(false);
 
-  const LoginModalTitle = (
-    <Center w="100%">
-      <Text fw={700} size="xl">
-        {t.signInToReturnone}
-      </Text>
-    </Center>
-  );
   return (
     <>
       <Button
@@ -98,7 +93,13 @@ export function LoginComponents({ t }: { t: language }) {
         opened={loginOppened}
         onClose={loginClose}
         radius="md"
-        title={LoginModalTitle}
+        title={
+          <Center w="100%">
+            <Text fw={700} size="xl">
+              {t.signInToReturnone}
+            </Text>
+          </Center>
+        }
       >
         <Stack className={classes.modelPadding}>
           <TextInput
@@ -157,11 +158,15 @@ export function LoginComponents({ t }: { t: language }) {
 }
 
 export function SignupComponents({ t }: { t: language }) {
+  // if post sign and the process are loading
   const [loading, setLoading] = useState(false);
+  // set modal open or close
   const [signupOppened, { toggle: signupOpen, close: signupClose }] =
     useDisclosure(false);
 
+  // cuz username need update frequently to let user know does this username is available
   const [usernameError, setUsernameError] = useState("");
+  // set signup form(mantine components)
   const signupform = useForm({
     initialValues: {
       username: "",
@@ -171,6 +176,7 @@ export function SignupComponents({ t }: { t: language }) {
     },
 
     validate: {
+      // username cuz need update frequently so use this way (i know this is so stupid)
       username: (value) => (usernameError === "" ? null : usernameError),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : t.invalidEmail),
       password: (value) =>
@@ -182,9 +188,17 @@ export function SignupComponents({ t }: { t: language }) {
     },
   });
 
-  const [username] = useDebouncedValue(signupform.values.username, 500);
-
+  // set username and this will delay 300ms (need rate the api)
+  const [username] = useDebouncedValue(signupform.values.username, 300);
+  
+  // if the username variable is change than check the username is been use or not
   const fetchCheckUsername = async () => {
+    // username have no type then just set error to the UsernameError (Because I don't want the user to have an error without even typing anything)
+    if (username.length === 0) {
+      setUsernameError(t.pleaseEnterAUsername);
+      return;
+    }
+    // get api to check username is been use or not
     const res = await checkUsername(username);
     if (res.data.inuse) {
       signupform.setErrors({ username: t.usernameHasBeenUse });
@@ -206,22 +220,7 @@ export function SignupComponents({ t }: { t: language }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
-  const LoginModalTitle = (
-    <Center w="100%">
-      <Text fw={700} size="xl">
-        {t.signInToReturnone}
-      </Text>
-    </Center>
-  );
-
-  const SignupModalTitle = (
-    <Center w="100%">
-      <Text fw={700} size="xl">
-        {t.signUpForReturnone}
-      </Text>
-    </Center>
-  );
-
+  //if user click the signup button than post to the backend api
   const signUp = async () => {
     setLoading(true);
     const res = await postSignUp(
@@ -230,7 +229,7 @@ export function SignupComponents({ t }: { t: language }) {
       signupform.values.email
     );
     if (res.status == 200) {
-      signupClose()
+      signupClose();
       signupform.reset();
     }
     if (res.data.message == "This email address is already in use") {
@@ -251,6 +250,7 @@ export function SignupComponents({ t }: { t: language }) {
     }
     setLoading(false);
   };
+  
   return (
     <>
       <Button variant="filled" radius="md" onClick={signupOpen}>
@@ -261,7 +261,13 @@ export function SignupComponents({ t }: { t: language }) {
         opened={signupOppened}
         onClose={signupClose}
         radius="md"
-        title={SignupModalTitle}
+        title={
+          <Center w="100%">
+            <Text fw={700} size="xl">
+              {t.signUpForReturnone}
+            </Text>
+          </Center>
+        }
       >
         <form
           onSubmit={signupform.onSubmit(() => {

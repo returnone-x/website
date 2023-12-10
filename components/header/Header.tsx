@@ -45,7 +45,8 @@ export function HeaderComponent() {
     usernameHasBeenUse: t("usernameHasBeenUse"),
     emailHasBeenUse: t("emailHasBeenUse"),
     anUnexpectedErrorOccurred: t("anUnexpectedErrorOccurred"),
-    pleaseTryAgainLater: t("pleaseTryAgainLater")
+    pleaseTryAgainLater: t("pleaseTryAgainLater"),
+    pleaseEnterAUsername: t("pleaseEnterAUsername")
   }
   
   return (
