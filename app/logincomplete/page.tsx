@@ -1,5 +1,11 @@
 "use client"
+
+import { useEffect } from "react";
+
 export default function Home() {
-console.log("Login Or Signup Complete")
-  return (<>Signup or Login Complete</>);
+  useEffect(() => {
+    window.postMessage("hello")
+    window.close();
+  })
+  return (<></>);
 }

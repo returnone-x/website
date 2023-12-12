@@ -22,14 +22,17 @@ import {
 import { useForm } from "@mantine/form";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { values } from "lodash";
 import { passwordStrength } from "check-password-strength";
 import { useEffect, useState } from "react";
 import { checkUsername } from "@/api/Auth/checkUsername";
 import { postSignUp } from "@/api/Auth/signup";
 import { notifications } from "@mantine/notifications";
-import { HiEmojiSad } from "react-icons/hi";
-import { apiUrl } from "@/config/config";
+import { HiEmojiSad, HiBadgeCheck, HiFingerPrint } from "react-icons/hi";
+import { API_URL } from "@/config/config";
+import { IsValidUsername } from "@/utils/valid";
+import { rename } from "@/api/user/rename";
+import { hasCookie } from "cookies-next";
+import { checkAuthorizationa } from "@/api/Auth/checkAuthorizationa";
 
 // set t type
 type language = {
@@ -55,10 +58,14 @@ type language = {
   passwordDidNotMatch: string;
   invalidUsername: string;
   usernameHasBeenUse: string;
-  emailIsBeenUse: string;
+  emailHasBeenUse: string;
   anUnexpectedErrorOccurred: string;
   pleaseTryAgainLater: string;
   pleaseEnterAUsername: string;
+  rename: string;
+  successfulOauthSignup: string;
+  successfulOauthsignupMessage: string;
+  pleaseUpdateYourName: string;
 };
 
 // whole components
@@ -159,6 +166,10 @@ export function LoginComponents({ t }: { t: language }) {
 }
 
 export function SignupComponents({ t }: { t: language }) {
+  const [
+    RenameModalStatus,
+    { toggle: RenameModalOpen, close: RenameModalClose },
+  ] = useDisclosure(false);
   // if post sign and the process are loading
   const [loading, setLoading] = useState(false);
   // set modal open or close
@@ -179,7 +190,10 @@ export function SignupComponents({ t }: { t: language }) {
     validate: {
       // username cuz need update frequently so use this way (i know this is so stupid)
       username: (value) => (usernameError === "" ? null : usernameError),
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : t.invalidEmail),
+      email: (value) =>
+        /^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]$/.test(value)
+          ? null
+          : t.invalidEmail,
       password: (value) =>
         !["Too weak"].includes(passwordStrength(value).value)
           ? null
@@ -204,11 +218,7 @@ export function SignupComponents({ t }: { t: language }) {
     if (res.data.inuse) {
       signupform.setErrors({ username: t.usernameHasBeenUse });
       setUsernameError(t.usernameHasBeenUse);
-    } else if (
-      /^[a-zA-Z0-9](?:[a-zA-Z0-9]|[_](?=[a-zA-Z0-9]))*[a-zA-Z0-9]$/.test(
-        username
-      )
-    ) {
+    } else if (IsValidUsername(username)) {
       signupform.setErrors({ username: null });
       setUsernameError("");
     } else {
@@ -231,15 +241,24 @@ export function SignupComponents({ t }: { t: language }) {
     );
     if (res.status == 200) {
       signupClose();
+      notifications.show({
+        color: "green",
+        title: t.successfulOauthSignup,
+        message: t.successfulOauthsignupMessage,
+        icon: <HiBadgeCheck size={25} />,
+        classNames: classes,
+        autoClose: 5000,
+      });
       signupform.reset();
     }
     if (res.data.message == "This email address is already in use") {
-      signupform.setErrors({ email: t.emailIsBeenUse });
+      signupform.setErrors({ email: t.emailHasBeenUse });
     }
     if (res.data.message == "This username is already in use") {
       signupform.setErrors({ email: t.usernameHasBeenUse });
     }
     if (res.status == 500) {
+      signupClose();
       notifications.show({
         color: "red",
         title: t.anUnexpectedErrorOccurred,
@@ -312,18 +331,18 @@ export function SignupComponents({ t }: { t: language }) {
             />
             <Divider my="xs" labelPosition="center" label={t.orSignupWith} />
             <Group grow justify="space-between">
-              <Google signupLoading={loading} />
-              <Button
-                variant="outline"
-                radius="xl"
-                size="md"
-                disabled={loading}
-                className={classes.outlinebutton}
-              >
-                <FaGithub className={classes.icon}></FaGithub>
-                <Space w="xs" />
-                Github
-              </Button>
+              <Google
+                t={t}
+                signupLoading={loading}
+                signupClose={signupClose}
+                RenameModalOpen={RenameModalOpen}
+              />
+              <Github
+                t={t}
+                signupLoading={loading}
+                signupClose={signupClose}
+                RenameModalOpen={RenameModalOpen}
+              />
             </Group>
             <Space h="xs" />
             <Text size="xs">{t.iAgreeTerms}</Text>
@@ -345,12 +364,29 @@ export function SignupComponents({ t }: { t: language }) {
           </Stack>
         </form>
       </Modal>
+      <RenameModal
+        t={t}
+        RenameModalStatus={RenameModalStatus}
+        RenameModalClose={RenameModalClose}
+      ></RenameModal>
     </>
   );
 }
 
-export function Google({ signupLoading }: { signupLoading: boolean }) {
+export function Google({
+  t,
+  signupLoading,
+  signupClose,
+  RenameModalOpen,
+}: {
+  t: language;
+  signupLoading: boolean;
+  signupClose: () => void;
+  RenameModalOpen: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
   const handleOpenWindow = () => {
+    setLoading(true);
     var screen_width = window.screen.width;
     var screen_height = window.screen.height;
     var left_position = (screen_width - 640) / 2;
@@ -358,17 +394,34 @@ export function Google({ signupLoading }: { signupLoading: boolean }) {
     var window_features =
       "width=640,height=668,left=" + left_position + ",top=" + top_position;
     const popup = window.open(
-      apiUrl + "/auth/oauth/google",
+      API_URL + "/auth/oauth/google",
       "_blank",
       window_features
     );
-    if(popup) {
-      console.log("fuckyou");
-      popup.addEventListener("message", function (event) {
-        console.log("fuckfuckfuck");
-      });
+
+    if (popup) {
+      const checkPopup = setInterval(() => {
+        if (popup.closed) {
+          clearInterval(checkPopup);
+          setLoading(false);
+          if (hasCookie("first_login")) {
+            signupClose();
+            RenameModalOpen();
+          } else {
+            const fetchCheckAuthorizationa = async () => {
+              const res = await checkAuthorizationa();
+              if (res.status == 200) {
+                signupClose();
+              } else {
+              }
+            };
+            fetchCheckAuthorizationa();
+          }
+        }
+      }, 100);
     }
   };
+
   return (
     <>
       <Button
@@ -376,6 +429,7 @@ export function Google({ signupLoading }: { signupLoading: boolean }) {
         radius="xl"
         size="md"
         disabled={signupLoading}
+        loading={loading}
         className={classes.outlinebutton}
         onClick={() => handleOpenWindow()}
       >
@@ -383,6 +437,182 @@ export function Google({ signupLoading }: { signupLoading: boolean }) {
         <Space w="xs" />
         Google
       </Button>
+    </>
+  );
+}
+
+export function Github({
+  t,
+  signupLoading,
+  signupClose,
+  RenameModalOpen,
+}: {
+  t: language;
+  signupLoading: boolean;
+  signupClose: () => void;
+  RenameModalOpen: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
+  const handleOpenWindow = () => {
+    setLoading(true);
+    var screen_width = window.screen.width;
+    var screen_height = window.screen.height;
+    var left_position = (screen_width - 640) / 2;
+    var top_position = (screen_height - 668) / 2;
+    var window_features =
+      "width=640,height=668,left=" + left_position + ",top=" + top_position;
+    const popup = window.open(
+      API_URL + "/auth/oauth/github",
+      "_blank",
+      window_features
+    );
+
+    if (popup) {
+      const checkPopup = setInterval(() => {
+        if (popup.closed) {
+          signupClose();
+          clearInterval(checkPopup);
+          setLoading(false);
+          if (hasCookie("first_login")) {
+            RenameModalOpen();
+          } else {
+            const fetchCheckAuthorizationa = async () => {
+              const res = await checkAuthorizationa();
+              if (res.status == 200) {
+                signupClose();
+              } else {
+              }
+            };
+            fetchCheckAuthorizationa();
+          }
+        }
+      }, 100);
+    }
+  };
+
+  return (
+    <>
+      <Button
+        variant="outline"
+        radius="xl"
+        size="md"
+        disabled={signupLoading}
+        loading={loading}
+        className={classes.outlinebutton}
+        onClick={() => handleOpenWindow()}
+      >
+        <FaGithub className={classes.icon}></FaGithub>
+        <Space w="xs" />
+        Github
+      </Button>
+    </>
+  );
+}
+
+function RenameModal({
+  t,
+  RenameModalStatus,
+  RenameModalClose,
+}: {
+  t: language;
+  RenameModalStatus: boolean;
+  RenameModalClose: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+  const [username, setUsername] = useDebouncedState("", 200);
+  // if the username variable is change than check the username is been use or not
+  const fetchCheckUsername = async () => {
+    if (username.length === 0) {
+      return;
+    }
+    // get api to check username is been use or not
+    const res = await checkUsername(username);
+    if (res.data.inuse) {
+      setUsernameError(t.usernameHasBeenUse);
+    } else if (IsValidUsername(username)) {
+      setUsernameError("");
+    } else {
+      setUsernameError(t.invalidUsername);
+    }
+  };
+  useEffect(() => {
+    fetchCheckUsername();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username]);
+
+  const renameFunction = async () => {
+    setLoading(true);
+    if (username.length === 0) {
+      setUsernameError(t.pleaseEnterAUsername);
+      setLoading(false);
+      return;
+    } else if (usernameError != "") {
+      setLoading(false);
+      return;
+    } else {
+      console.log(usernameError);
+      console.log(usernameError != "");
+      console.log(username.length);
+      const res = await rename(username);
+      if (res.status == 200) {
+        RenameModalClose();
+        notifications.show({
+          color: "green",
+          title: t.successfulOauthSignup,
+          message: t.successfulOauthsignupMessage,
+          icon: <HiBadgeCheck size={25} />,
+          classNames: classes,
+          autoClose: 5000,
+        });
+      } else {
+        setUsernameError(t.invalidUsername);
+      }
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Modal
+        opened={RenameModalStatus}
+        onClose={RenameModalClose}
+        radius="md"
+        title={
+          <Center w="100%">
+            <Text fw={700} size="xl">
+              {t.pleaseUpdateYourName}
+            </Text>
+          </Center>
+        }
+      >
+        <Stack className={classes.modelPadding}>
+          <TextInput
+            label={<Text fw={700}>{t.username}</Text>}
+            size="md"
+            type="username"
+            placeholder={t.typeUsername}
+            radius="md"
+            error={usernameError}
+            disabled={loading}
+            onChange={(event) => setUsername(event.currentTarget.value)}
+          />
+          <Divider my="xs" labelPosition="center" />
+          <Button
+            variant="filled"
+            radius="md"
+            size="sm"
+            leftSection={<HiFingerPrint />}
+            className={classes.outlinebutton}
+            type="submit"
+            loading={loading}
+            fullWidth
+            onClick={renameFunction}
+          >
+            {t.rename}
+          </Button>
+        </Stack>
+      </Modal>
     </>
   );
 }

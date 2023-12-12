@@ -1,14 +1,14 @@
 import { API_URL } from "@/config/config";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-export async function checkUsername(username: string) {
+export async function rename(username: string) {
   let data = JSON.stringify({
-    user_name: username,
+    "new_username": username,
   });
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: API_URL + "/auth/usernameexist",
+    url: API_URL + "/user/rename",
     headers: {
       "Content-Type": "application/json",
     },
@@ -17,6 +17,5 @@ export async function checkUsername(username: string) {
         return true; // 将所有状态码都视为成功
     },
   };
-
   return await axios.request(config)
 }
