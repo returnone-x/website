@@ -21,14 +21,18 @@
     "createOne": "create one",
     "orLoginWith": "or Login with",
     "orSignupWith": "or Sign up with",
-    "invalidEmail": "Invalid email",
+    "invalidEmail": "Invalid email(please use lowercase letters)",
     "passwordIsTooWeak": "Password is too weak",
     "passwordDidNotMatch": "Password did not match",
-    "invalidUsername": "Username can only contain underscores(_), numbers and letters",
+    "invalidUsername": "Username can only contain underscores(_),dot(.), numbers and letters, the first digit and the last digit can't be underscore or dot",
     "usernameHasBeenUse": "This username has been used",
-    "emailIsBeenUse": "This email is already registered",
+    "emailHasBeenUse": "This email is already registered",
     "anUnexpectedErrorOccurred": "An unexpected error occurred",
     "pleaseTryAgainLater": "Please try again later",
-    "pleaseEnterAUsername": "Please enter a username"
+    "pleaseEnterAUsername": "Please enter a username",
+    "rename": "Give me a new identity",
+    "pleaseUpdateYourName": "Please update your name",
+    "successfulOauthSignup": "Successful Signup",
+    "successfulOauthsignupMessage": "You have successfully created a Returnone account, happy hunting!"
   }
 }

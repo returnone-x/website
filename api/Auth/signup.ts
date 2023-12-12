@@ -1,4 +1,4 @@
-import { backendUrl } from "@/config/config";
+import { API_URL } from "@/config/config";
 import axios from "axios";
 
 export async function postSignUp(username: string, password: string, email: string) {
@@ -10,7 +10,7 @@ export async function postSignUp(username: string, password: string, email: stri
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: backendUrl + "/auth/signup",
+    url: API_URL + "/auth/signup",
     headers: {
       "Content-Type": "application/json",
     },
