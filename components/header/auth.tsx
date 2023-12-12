@@ -234,6 +234,7 @@ export function SignupComponents({ t }: { t: language }) {
   //if user click the signup button than post to the backend api
   const signUp = async () => {
     setLoading(true);
+    // post to backend
     const res = await postSignUp(
       signupform.values.username,
       signupform.values.password,
@@ -385,6 +386,7 @@ export function Google({
   RenameModalOpen: () => void;
 }) {
   const [loading, setLoading] = useState(false);
+  // open a popup windows
   const handleOpenWindow = () => {
     setLoading(true);
     var screen_width = window.screen.width;
@@ -400,6 +402,7 @@ export function Google({
     );
 
     if (popup) {
+      // check is the windows be closed
       const checkPopup = setInterval(() => {
         if (popup.closed) {
           clearInterval(checkPopup);
@@ -453,6 +456,7 @@ export function Github({
   RenameModalOpen: () => void;
 }) {
   const [loading, setLoading] = useState(false);
+  // open a popup windows
   const handleOpenWindow = () => {
     setLoading(true);
     var screen_width = window.screen.width;
@@ -468,6 +472,7 @@ export function Github({
     );
 
     if (popup) {
+      // check is the windows be closed
       const checkPopup = setInterval(() => {
         if (popup.closed) {
           signupClose();
@@ -520,6 +525,7 @@ function RenameModal({
 }) {
   const [loading, setLoading] = useState(false);
   const [usernameError, setUsernameError] = useState("");
+  // when username has not edit in 200ms than change the username
   const [username, setUsername] = useDebouncedState("", 200);
   // if the username variable is change than check the username is been use or not
   const fetchCheckUsername = async () => {
@@ -543,10 +549,12 @@ function RenameModal({
 
   const renameFunction = async () => {
     setLoading(true);
+    // if the username have nothing
     if (username.length === 0) {
       setUsernameError(t.pleaseEnterAUsername);
       setLoading(false);
       return;
+    // if have error
     } else if (usernameError != "") {
       setLoading(false);
       return;
