@@ -21,14 +21,18 @@
     "createOne": "立即註冊",
     "orLoginWith": "or Login with",
     "orSignupWith": "or Sign up with",
-    "invalidEmail": "無效的電子信箱",
+    "invalidEmail": "Invalid email(please use lowercase letters)",
     "passwordIsTooWeak": "密碼太弱了",
     "passwordDidNotMatch": "兩次輸入的密碼不相同",
-    "invalidUsername": "用戶名稱只能包含底線(_), 數字及英文字母",
+    "invalidUsername": "Username can only contain underscores(_),dot(.), numbers and letters, the first digit and the last digit can't be underscore or dot",
     "usernameHasBeenUse": "This username has been used",
-    "emailIsBeenUse": "This email is already registered",
+    "emailHasBeenUse": "This email is already registered",
     "anUnexpectedErrorOccurred": "發生未預期的錯誤",
     "pleaseTryAgainLater": "請稍後再試一次",
-    "pleaseEnterAUsername": "Please enter a username"
+    "pleaseEnterAUsername": "Please enter a username",
+    "rename": "Give me a new identity",
+    "pleaseUpdateYourName": "Please update your name",
+    "successfulOauthSignup": "Successful Signup",
+    "successfulOauthsignupMessage": "You have successfully created a Returnone account, happy hunting!"
   }
 }
