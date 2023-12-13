@@ -33,6 +33,9 @@
     "rename": "給我一個全新的身份!!",
     "pleaseUpdateYourName": "請更新您的使用者名稱",
     "successfulOauthSignup": "成功註冊!",
-    "successfulOauthsignupMessage": "你成功創建了一個Returnone帳號，祝你Coding愉快!"
+    "successfulOauthsignupMessage": "你成功創建了一個Returnone帳號，祝你Coding愉快!",
+    "successfulLogin": "Succesful Login",
+    "successfulLoginMessage": "Welcome back to Returnone!",
+    "invalidEmailOrPassword": "Invalid email or password"
   }
 }
