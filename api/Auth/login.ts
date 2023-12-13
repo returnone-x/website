@@ -1,18 +1,22 @@
 import { API_URL } from "@/config/config";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-export async function checkAuthorizationa() {
+export async function postLogin( email: string, password: string) {
+  let data = JSON.stringify({
+    "email": email,
+    "password": password,
+  });
   let config = {
-    method: "get",
+    method: "post",
     maxBodyLength: Infinity,
-    url: API_URL + "/auth/authorizationa",
+    url: API_URL + "/auth/login",
     headers: {
       "Content-Type": "application/json",
     },
+    data: data,
     validateStatus: function () {
         return true;
     },
   };
-
   return await axios.request(config)
 }

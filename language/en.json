@@ -33,6 +33,9 @@
     "rename": "Give me a new identity",
     "pleaseUpdateYourName": "Please update your name",
     "successfulOauthSignup": "Successful Signup",
-    "successfulOauthsignupMessage": "You have successfully created a Returnone account, happy hunting!"
+    "successfulOauthsignupMessage": "You have successfully created a Returnone account, happy hunting!",
+    "successfulLogin": "Succesful Login",
+    "successfulLoginMessage": "Welcome back to Returnone!",
+    "invalidEmailOrPassword": "Invalid email or password"
   }
 }

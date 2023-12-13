@@ -6,9 +6,6 @@ import {
   TextInput,
   Space,
   ActionIcon,
-  Anchor,
-  Box,
-  useMantineColorScheme,
 } from "@mantine/core";
 import classes from "./Header.module.css";
 import { HiOutlineSearch, HiOutlineQuestionMarkCircle } from "react-icons/hi";
@@ -16,6 +13,7 @@ import { FaGithub } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import { SetTheme } from "./mode";
 import { SignupLogin } from "./auth";
+import { GetAvatar } from "@/api/user/getAvatar";
 
 export function HeaderComponent() {
   const t = useTranslations("Header");
@@ -50,7 +48,10 @@ export function HeaderComponent() {
     rename: t('rename'),
     successfulOauthSignup: t("successfulOauthSignup"),
     successfulOauthsignupMessage: t("successfulOauthsignupMessage"),
-    pleaseUpdateYourName: t("pleaseUpdateYourName")
+    pleaseUpdateYourName: t("pleaseUpdateYourName"),
+    successfulLogin: t("successfulLogin"),
+    successfulLoginMessage: t("successfulLoginMessage"),
+    invalidEmailOrPassword: t("invalidEmailOrPassword")
   }
   
   return (
@@ -116,4 +117,14 @@ export function HeaderComponent() {
       </Container>
     </header>
   );
+}
+
+async function getAvatar() {
+  const res = await GetAvatar();
+  
+  if (res.status != 200) {
+    return ""
+  }
+
+  return res.data.data
 }
