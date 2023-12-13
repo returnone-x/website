@@ -6,6 +6,7 @@ import {
   TextInput,
   Space,
   ActionIcon,
+  Avatar,
 } from "@mantine/core";
 import classes from "./Header.module.css";
 import { HiOutlineSearch, HiOutlineQuestionMarkCircle } from "react-icons/hi";
@@ -13,47 +14,62 @@ import { FaGithub } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import { SetTheme } from "./mode";
 import { SignupLogin } from "./auth";
-import { GetAvatar } from "@/api/user/getAvatar";
+import { GetAvatarFromServerSide } from "@/api/user/getAvatar";
+import { cookies } from "next/headers";
 
-export function HeaderComponent() {
-  const t = useTranslations("Header");
+export type HeaderLanguage = {
+  signUp: string;
+  logIn: string;
+  search: string;
+  blog: string;
+  aboutUs: string;
+  ask: string;
+  username: string;
+  password: string;
+  email: string;
+  confirmPassword: string;
+  typeUsername: string;
+  typePassword: string;
+  typeEmail: string;
+  signInToReturnone: string;
+  signUpForReturnone: string;
+  iAgreeTerms: string;
+  alreadyHaveAccount: string;
+  noAccount: string;
+  createOne: string;
+  orLoginWith: string;
+  orSignupWith: string;
+  invalidEmail: string;
+  passwordIsTooWeak: string;
+  passwordDidNotMatch: string;
+  invalidUsername: string;
+  usernameHasBeenUse: string;
+  emailHasBeenUse: string;
+  anUnexpectedErrorOccurred: string;
+  pleaseTryAgainLater: string;
+  pleaseEnterAUsername: string;
+  rename: string;
+  pleaseUpdateYourName: string;
+  successfulOauthSignup: string;
+  successfulOauthsignupMessage: string;
+  successfulLogin: string;
+  successfulLoginMessage: string;
+  invalidEmailOrPassword: string;
+};
 
-  const signipLoginTranslate = {
-    logIn: t("logIn"),
-    signUp: t("signUp"),
-    username: t("username"),
-    password: t("password"),
-    email: t("email"),
-    typeUsername: t("typeUsername"),
-    typePassword: t("typePassword"),
-    typeEmail: t("typeEmail"),
-    signInToReturnone: t("signInToReturnone"),
-    signUpForReturnone: t("signUpForReturnone"),
-    iAgreeTerms: t("iAgreeTerms"),
-    alreadyHaveAccount: t("alreadyHaveAccount"),
-    noAccount: t("noAccount"),
-    createOne: t("createOne"),
-    orLoginWith: t("orLoginWith"),
-    orSignupWith: t("orSignupWith"),
-    confirmPassword: t("confirmPassword"),
-    invalidEmail: t("invalidEmail"),
-    passwordIsTooWeak: t("passwordIsTooWeak"),
-    passwordDidNotMatch: t("passwordDidNotMatch"),
-    invalidUsername: t("invalidUsername"),
-    usernameHasBeenUse: t("usernameHasBeenUse"),
-    emailHasBeenUse: t("emailHasBeenUse"),
-    anUnexpectedErrorOccurred: t("anUnexpectedErrorOccurred"),
-    pleaseTryAgainLater: t("pleaseTryAgainLater"),
-    pleaseEnterAUsername: t("pleaseEnterAUsername"),
-    rename: t('rename'),
-    successfulOauthSignup: t("successfulOauthSignup"),
-    successfulOauthsignupMessage: t("successfulOauthsignupMessage"),
-    pleaseUpdateYourName: t("pleaseUpdateYourName"),
-    successfulLogin: t("successfulLogin"),
-    successfulLoginMessage: t("successfulLoginMessage"),
-    invalidEmailOrPassword: t("invalidEmailOrPassword")
-  }
-  
+export async function HeaderComponent({ t }: { t: HeaderLanguage }) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken");
+  const avatar = await getAvatar(
+    accessToken ? accessToken.name + "=" + accessToken.value : ""
+  );
+
+  const userAvatarOrLogin = avatar != "" ? (
+    <Avatar variant="filled" radius="md" src={avatar} />
+  ) : (
+    <SignupLogin t={t} />
+  )
+
   return (
     <header className={classes.header}>
       <Container size="1440px" className={classes.container}>
@@ -69,7 +85,7 @@ export function HeaderComponent() {
               className={classes.centerHorizontal}
               visibleFrom="sm"
             >
-              {t("blog")}
+              {t.blog}
             </Text>{" "}
             <Text
               fw={700}
@@ -77,12 +93,12 @@ export function HeaderComponent() {
               className={classes.centerHorizontal}
               visibleFrom="sm"
             >
-              {t("aboutUs")}
+              {t.aboutUs}
             </Text>
           </Group>
 
           <TextInput
-            placeholder={t("search")}
+            placeholder={t.search}
             className={classes.textInput}
             radius="lg"
             rightSection={<HiOutlineSearch />}
@@ -96,12 +112,10 @@ export function HeaderComponent() {
               gradient={{ from: "#FFC37D", to: "#FF6B01", deg: 154 }}
               visibleFrom="md"
             >
-              {t("ask")}
+              {t.ask}
             </Button>
             <Space w="xl" className={classes.flexone} visibleFrom="md" />
-
-            <SignupLogin t={signipLoginTranslate} />
-
+            {userAvatarOrLogin}
             <Space w="xl" className={classes.flexone} visibleFrom="md" />
             <ActionIcon
               variant="subtle"
@@ -119,12 +133,12 @@ export function HeaderComponent() {
   );
 }
 
-async function getAvatar() {
-  const res = await GetAvatar();
-  
+async function getAvatar(accessToken: string) {
+  const res = await GetAvatarFromServerSide(accessToken);
+
   if (res.status != 200) {
-    return ""
+    return "";
   }
 
-  return res.data.data
+  return res.data.data;
 }

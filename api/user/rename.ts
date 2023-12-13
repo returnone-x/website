@@ -14,7 +14,7 @@ export async function rename(username: string) {
     },
     data: data,
     validateStatus: function () {
-        return true; // 将所有状态码都视为成功
+        return true;
     },
   };
   return await axios.request(config)

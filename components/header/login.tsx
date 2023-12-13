@@ -18,50 +18,15 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { HiEmojiSad, HiBadgeCheck } from "react-icons/hi";
 import { API_URL } from "@/config/config";
 import { hasCookie } from "cookies-next";
 import { checkAuthorizationa } from "@/api/Auth/checkAuthorizationa";
 import { postLogin } from "@/api/Auth/login";
-
-// set t type
-type language = {
-  logIn: string;
-  signUp: string;
-  username: string;
-  password: string;
-  email: string;
-  typeUsername: string;
-  typePassword: string;
-  typeEmail: string;
-  signInToReturnone: string;
-  signUpForReturnone: string;
-  iAgreeTerms: string;
-  alreadyHaveAccount: string;
-  noAccount: string;
-  createOne: string;
-  orLoginWith: string;
-  orSignupWith: string;
-  confirmPassword: string;
-  invalidEmail: string;
-  passwordIsTooWeak: string;
-  passwordDidNotMatch: string;
-  invalidUsername: string;
-  usernameHasBeenUse: string;
-  emailHasBeenUse: string;
-  anUnexpectedErrorOccurred: string;
-  pleaseTryAgainLater: string;
-  pleaseEnterAUsername: string;
-  rename: string;
-  successfulOauthSignup: string;
-  successfulOauthsignupMessage: string;
-  pleaseUpdateYourName: string;
-  successfulLogin: string;
-  successfulLoginMessage: string;
-  invalidEmailOrPassword: string;
-};
+import { HeaderLanguage } from "./Header";
+import { GetAvatar } from "@/api/user/getAvatar";
 
 // Login components
 export function LoginComponents({
@@ -70,12 +35,14 @@ export function LoginComponents({
   loginOpen,
   loginClose,
   signupOpen,
+  setAvatar,
 }: {
-  t: language;
+  t: HeaderLanguage;
   loginOppened: boolean;
   loginOpen: () => void;
   loginClose: () => void;
   signupOpen: () => void;
+  setAvatar: Dispatch<SetStateAction<string>>;
 }) {
   // if post login and the process are loading
   const [loading, setLoading] = useState(false);
@@ -104,6 +71,13 @@ export function LoginComponents({
     );
     if (res.status == 200) {
       loginClose();
+      const fetchGetAvatar = async () => {
+        const res = await GetAvatar();
+        if (res.status == 200) {
+          setAvatar(res.data.data)
+        }
+      };
+      fetchGetAvatar();
       notifications.show({
         color: "green",
         title: t.successfulOauthSignup,
@@ -191,11 +165,13 @@ export function LoginComponents({
                 t={t}
                 loginLoading={loading}
                 loginClose={loginClose}
+                setAvatar={setAvatar}
               ></Google>
               <Github
                 t={t}
                 loginLoading={loading}
                 loginClose={loginClose}
+                setAvatar={setAvatar}
               ></Github>
             </Group>
             <Group justify="space-between">
@@ -227,10 +203,12 @@ export function Google({
   t,
   loginLoading,
   loginClose,
+  setAvatar,
 }: {
-  t: language;
+  t: HeaderLanguage;
   loginLoading: boolean;
   loginClose: () => void;
+  setAvatar: Dispatch<SetStateAction<string>>;
 }) {
   const [loading, setLoading] = useState(false);
   // open a popup windows
@@ -258,6 +236,13 @@ export function Google({
             const res = await checkAuthorizationa();
             if (res.status == 200) {
               loginClose();
+              const fetchGetAvatar = async () => {
+                const res = await GetAvatar();
+                if (res.status == 200) {
+                  setAvatar(res.data.data)
+                }
+              };
+              fetchGetAvatar();
               notifications.show({
                 color: "green",
                 title: t.successfulLogin,
@@ -297,10 +282,12 @@ export function Github({
   t,
   loginLoading,
   loginClose,
+  setAvatar,
 }: {
-  t: language;
+  t: HeaderLanguage;
   loginLoading: boolean;
   loginClose: () => void;
+  setAvatar: Dispatch<SetStateAction<string>>;
 }) {
   const [loading, setLoading] = useState(false);
   // open a popup windows
@@ -328,6 +315,13 @@ export function Github({
             const res = await checkAuthorizationa();
             if (res.status == 200) {
               loginClose();
+              const fetchGetAvatar = async () => {
+                const res = await GetAvatar();
+                if (res.status == 200) {
+                  setAvatar(res.data.data)
+                }
+              };
+              fetchGetAvatar();
               notifications.show({
                 color: "green",
                 title: t.successfulLogin,

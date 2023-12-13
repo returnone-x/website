@@ -23,7 +23,7 @@ import { useForm } from "@mantine/form";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { passwordStrength } from "check-password-strength";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { checkUsername } from "@/api/Auth/checkUsername";
 import { postSignUp } from "@/api/Auth/signup";
 import { notifications } from "@mantine/notifications";
@@ -33,43 +33,8 @@ import { IsValidUsername } from "@/utils/valid";
 import { rename } from "@/api/user/rename";
 import { hasCookie } from "cookies-next";
 import { checkAuthorizationa } from "@/api/Auth/checkAuthorizationa";
-
-// set t type
-type language = {
-  logIn: string;
-  signUp: string;
-  username: string;
-  password: string;
-  email: string;
-  typeUsername: string;
-  typePassword: string;
-  typeEmail: string;
-  signInToReturnone: string;
-  signUpForReturnone: string;
-  iAgreeTerms: string;
-  alreadyHaveAccount: string;
-  noAccount: string;
-  createOne: string;
-  orLoginWith: string;
-  orSignupWith: string;
-  confirmPassword: string;
-  invalidEmail: string;
-  passwordIsTooWeak: string;
-  passwordDidNotMatch: string;
-  invalidUsername: string;
-  usernameHasBeenUse: string;
-  emailHasBeenUse: string;
-  anUnexpectedErrorOccurred: string;
-  pleaseTryAgainLater: string;
-  pleaseEnterAUsername: string;
-  rename: string;
-  successfulOauthSignup: string;
-  successfulOauthsignupMessage: string;
-  pleaseUpdateYourName: string;
-  successfulLogin: string;
-  successfulLoginMessage: string;
-  invalidEmailOrPassword: string;
-};
+import { HeaderLanguage } from "./Header";
+import { GetAvatar } from "@/api/user/getAvatar";
 
 export function SignupComponents({
   t,
@@ -77,12 +42,14 @@ export function SignupComponents({
   signupOpen,
   signupClose,
   loginOpen,
+  setAvatar,
 }: {
-  t: language;
+  t: HeaderLanguage;
   signupOppened: boolean;
   signupOpen: () => void;
   signupClose: () => void;
   loginOpen: () => void;
+  setAvatar: Dispatch<SetStateAction<string>>;
 }) {
   const [
     RenameModalStatus,
@@ -157,6 +124,13 @@ export function SignupComponents({
     );
     if (res.status == 200) {
       signupClose();
+      const fetchGetAvatar = async () => {
+        const res = await GetAvatar();
+        if (res.status == 200) {
+          setAvatar(res.data.data)
+        }
+      };
+      fetchGetAvatar();
       notifications.show({
         color: "green",
         title: t.successfulOauthSignup,
@@ -256,12 +230,14 @@ export function SignupComponents({
                 signupLoading={loading}
                 signupClose={signupClose}
                 RenameModalOpen={RenameModalOpen}
+                setAvatar={setAvatar}
               />
               <Github
                 t={t}
                 signupLoading={loading}
                 signupClose={signupClose}
                 RenameModalOpen={RenameModalOpen}
+                setAvatar={setAvatar}
               />
             </Group>
             <Space h="xs" />
@@ -289,6 +265,7 @@ export function SignupComponents({
         t={t}
         RenameModalStatus={RenameModalStatus}
         RenameModalClose={RenameModalClose}
+        setAvatar={setAvatar}
       ></RenameModal>
     </>
   );
@@ -299,11 +276,13 @@ export function Google({
   signupLoading,
   signupClose,
   RenameModalOpen,
+  setAvatar,
 }: {
-  t: language;
+  t: HeaderLanguage;
   signupLoading: boolean;
   signupClose: () => void;
   RenameModalOpen: () => void;
+  setAvatar: Dispatch<SetStateAction<string>>;
 }) {
   const [loading, setLoading] = useState(false);
   // open a popup windows
@@ -331,14 +310,14 @@ export function Google({
             signupClose();
             RenameModalOpen();
           } else {
-            const fetchCheckAuthorizationa = async () => {
-              const res = await checkAuthorizationa();
+            const fetchGetAvatar = async () => {
+              const res = await GetAvatar();
               if (res.status == 200) {
                 signupClose();
-              } else {
+                setAvatar(res.data.data)
               }
             };
-            fetchCheckAuthorizationa();
+            fetchGetAvatar();
           }
         }
       }, 100);
@@ -369,11 +348,13 @@ export function Github({
   signupLoading,
   signupClose,
   RenameModalOpen,
+  setAvatar,
 }: {
-  t: language;
+  t: HeaderLanguage;
   signupLoading: boolean;
   signupClose: () => void;
   RenameModalOpen: () => void;
+  setAvatar: Dispatch<SetStateAction<string>>;
 }) {
   const [loading, setLoading] = useState(false);
   // open a popup windows
@@ -395,20 +376,20 @@ export function Github({
       // check is the windows be closed
       const checkPopup = setInterval(() => {
         if (popup.closed) {
-          signupClose();
           clearInterval(checkPopup);
           setLoading(false);
           if (hasCookie("first_login")) {
+            signupClose();
             RenameModalOpen();
           } else {
-            const fetchCheckAuthorizationa = async () => {
-              const res = await checkAuthorizationa();
+            const fetchGetAvatar = async () => {
+              const res = await GetAvatar();
               if (res.status == 200) {
                 signupClose();
-              } else {
+                setAvatar(res.data.data)
               }
             };
-            fetchCheckAuthorizationa();
+            fetchGetAvatar();
           }
         }
       }, 100);
@@ -438,10 +419,12 @@ function RenameModal({
   t,
   RenameModalStatus,
   RenameModalClose,
+  setAvatar,
 }: {
-  t: language;
+  t: HeaderLanguage;
   RenameModalStatus: boolean;
   RenameModalClose: () => void;
+  setAvatar: Dispatch<SetStateAction<string>>;
 }) {
   const [loading, setLoading] = useState(false);
   const [usernameError, setUsernameError] = useState("");
@@ -485,6 +468,13 @@ function RenameModal({
       const res = await rename(username);
       if (res.status == 200) {
         RenameModalClose();
+        const fetchGetAvatar = async () => {
+          const res = await GetAvatar();
+          if (res.status == 200) {
+            setAvatar(res.data.data)
+          }
+        };
+        fetchGetAvatar();
         notifications.show({
           color: "green",
           title: t.successfulOauthSignup,
@@ -493,6 +483,7 @@ function RenameModal({
           classNames: classes,
           autoClose: 5000,
         });
+
       } else {
         setUsernameError(t.invalidUsername);
       }
