@@ -1,7 +1,11 @@
 import { HeaderComponent } from "@/components/header/Header";
 import { useTranslations } from "next-intl";
 
-export default function Home() {
+export default function Home({
+  params: { locale },
+}: {
+  params: { locale: "en" | "zh-tw" };
+}) {
   const t = useTranslations("Header");
   const signipLoginTranslate = {
     signUp: t("signUp"),
@@ -42,5 +46,5 @@ export default function Home() {
     successfulLoginMessage: t("successfulLoginMessage"),
     invalidEmailOrPassword: t("invalidEmailOrPassword"),
   };
-  return <HeaderComponent t={signipLoginTranslate}/>;
+  return <HeaderComponent t={signipLoginTranslate} locale={locale}/>;
 }

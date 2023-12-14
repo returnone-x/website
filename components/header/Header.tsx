@@ -11,11 +11,11 @@ import {
 import classes from "./Header.module.css";
 import { HiOutlineSearch, HiOutlineQuestionMarkCircle } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
-import { useTranslations } from "next-intl";
 import { SetTheme } from "./mode";
 import { SignupLogin } from "./auth";
 import { GetAvatarFromServerSide } from "@/api/user/getAvatar";
 import { cookies } from "next/headers";
+import { ChangeLanguage } from "./language";
 
 export type HeaderLanguage = {
   signUp: string;
@@ -57,18 +57,25 @@ export type HeaderLanguage = {
   invalidEmailOrPassword: string;
 };
 
-export async function HeaderComponent({ t }: { t: HeaderLanguage }) {
+export async function HeaderComponent({
+  t,
+  locale,
+}: {
+  t: HeaderLanguage;
+  locale: string;
+}) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken");
   const avatar = await getAvatar(
     accessToken ? accessToken.name + "=" + accessToken.value : ""
   );
 
-  const userAvatarOrLogin = avatar != "" ? (
-    <Avatar variant="filled" radius="md" src={avatar} />
-  ) : (
-    <SignupLogin t={t} />
-  )
+  const userAvatarOrLogin =
+    avatar != "" ? (
+      <Avatar variant="filled" radius="md" src={avatar} />
+    ) : (
+      <SignupLogin t={t} />
+    );
 
   return (
     <header className={classes.header}>
@@ -117,6 +124,7 @@ export async function HeaderComponent({ t }: { t: HeaderLanguage }) {
             <Space w="xl" className={classes.flexone} visibleFrom="md" />
             {userAvatarOrLogin}
             <Space w="xl" className={classes.flexone} visibleFrom="md" />
+            <ChangeLanguage />
             <ActionIcon
               variant="subtle"
               aria-label="github"

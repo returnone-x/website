@@ -74,7 +74,7 @@ export function LoginComponents({
       const fetchGetAvatar = async () => {
         const res = await GetAvatar();
         if (res.status == 200) {
-          setAvatar(res.data.data)
+          setAvatar(res.data.data);
         }
       };
       fetchGetAvatar();
@@ -176,7 +176,7 @@ export function LoginComponents({
             </Group>
             <Group justify="space-between">
               <Text size="sm">
-                {t.noAccount}
+                {t.noAccount + " "}
                 <Anchor onClick={() => changeToSignupModal()}>
                   {t.createOne}
                 </Anchor>
@@ -239,7 +239,7 @@ export function Google({
               const fetchGetAvatar = async () => {
                 const res = await GetAvatar();
                 if (res.status == 200) {
-                  setAvatar(res.data.data)
+                  setAvatar(res.data.data);
                 }
               };
               fetchGetAvatar();
@@ -318,7 +318,7 @@ export function Github({
               const fetchGetAvatar = async () => {
                 const res = await GetAvatar();
                 if (res.status == 200) {
-                  setAvatar(res.data.data)
+                  setAvatar(res.data.data);
                 }
               };
               fetchGetAvatar();
