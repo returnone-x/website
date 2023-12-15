@@ -36,6 +36,7 @@ export function LoginComponents({
   loginClose,
   signupOpen,
   setAvatar,
+  fullWidth
 }: {
   t: HeaderLanguage;
   loginOppened: boolean;
@@ -43,6 +44,7 @@ export function LoginComponents({
   loginClose: () => void;
   signupOpen: () => void;
   setAvatar: Dispatch<SetStateAction<string>>;
+  fullWidth: boolean;
 }) {
   // if post login and the process are loading
   const [loading, setLoading] = useState(false);
@@ -74,7 +76,7 @@ export function LoginComponents({
       const fetchGetAvatar = async () => {
         const res = await GetAvatar();
         if (res.status == 200) {
-          setAvatar(res.data.data)
+          setAvatar(res.data.data);
         }
       };
       fetchGetAvatar();
@@ -120,6 +122,7 @@ export function LoginComponents({
         radius="md"
         className={classes.outlinebutton}
         onClick={loginOpen}
+        fullWidth={fullWidth}
       >
         {t.logIn}
       </Button>
@@ -176,7 +179,7 @@ export function LoginComponents({
             </Group>
             <Group justify="space-between">
               <Text size="sm">
-                {t.noAccount}
+                {t.noAccount + " "}
                 <Anchor onClick={() => changeToSignupModal()}>
                   {t.createOne}
                 </Anchor>
@@ -239,7 +242,7 @@ export function Google({
               const fetchGetAvatar = async () => {
                 const res = await GetAvatar();
                 if (res.status == 200) {
-                  setAvatar(res.data.data)
+                  setAvatar(res.data.data);
                 }
               };
               fetchGetAvatar();
@@ -318,7 +321,7 @@ export function Github({
               const fetchGetAvatar = async () => {
                 const res = await GetAvatar();
                 if (res.status == 200) {
-                  setAvatar(res.data.data)
+                  setAvatar(res.data.data);
                 }
               };
               fetchGetAvatar();

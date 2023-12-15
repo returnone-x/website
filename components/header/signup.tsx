@@ -43,6 +43,7 @@ export function SignupComponents({
   signupClose,
   loginOpen,
   setAvatar,
+  fullWidth,
 }: {
   t: HeaderLanguage;
   signupOppened: boolean;
@@ -50,6 +51,7 @@ export function SignupComponents({
   signupClose: () => void;
   loginOpen: () => void;
   setAvatar: Dispatch<SetStateAction<string>>;
+  fullWidth: boolean;
 }) {
   const [
     RenameModalStatus,
@@ -127,7 +129,7 @@ export function SignupComponents({
       const fetchGetAvatar = async () => {
         const res = await GetAvatar();
         if (res.status == 200) {
-          setAvatar(res.data.data)
+          setAvatar(res.data.data);
         }
       };
       fetchGetAvatar();
@@ -167,7 +169,7 @@ export function SignupComponents({
   };
   return (
     <>
-      <Button variant="filled" radius="md" onClick={signupOpen}>
+      <Button variant="filled" radius="md" onClick={signupOpen} fullWidth={fullWidth}>
         {t.signUp}
       </Button>
 
@@ -244,7 +246,7 @@ export function SignupComponents({
             <Text size="xs">{t.iAgreeTerms}</Text>
             <Group justify="space-between">
               <Text size="sm">
-                {t.alreadyHaveAccount}
+                {t.alreadyHaveAccount + " "}
                 <Anchor onClick={() => changeToLoginModal()}>{t.logIn}</Anchor>
               </Text>
               <Button
@@ -314,7 +316,7 @@ export function Google({
               const res = await GetAvatar();
               if (res.status == 200) {
                 signupClose();
-                setAvatar(res.data.data)
+                setAvatar(res.data.data);
               }
             };
             fetchGetAvatar();
@@ -386,7 +388,7 @@ export function Github({
               const res = await GetAvatar();
               if (res.status == 200) {
                 signupClose();
-                setAvatar(res.data.data)
+                setAvatar(res.data.data);
               }
             };
             fetchGetAvatar();
@@ -471,7 +473,7 @@ function RenameModal({
         const fetchGetAvatar = async () => {
           const res = await GetAvatar();
           if (res.status == 200) {
-            setAvatar(res.data.data)
+            setAvatar(res.data.data);
           }
         };
         fetchGetAvatar();
@@ -483,7 +485,6 @@ function RenameModal({
           classNames: classes,
           autoClose: 5000,
         });
-
       } else {
         setUsernameError(t.invalidUsername);
       }

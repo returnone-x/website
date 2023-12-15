@@ -36,6 +36,8 @@
     "successfulOauthsignupMessage": "You have successfully created a Returnone account, happy hunting!",
     "successfulLogin": "Succesful Login",
     "successfulLoginMessage": "Welcome back to Returnone!",
-    "invalidEmailOrPassword": "Invalid email or password"
+    "invalidEmailOrPassword": "Invalid email or password",
+    "logout": "Log out",
+    "profile": "Your profile"
   }
 }
