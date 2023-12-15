@@ -1,45 +1,82 @@
 "use client";
 
-import { ActionIcon, Button, Modal, TextInput } from "@mantine/core";
-import classes from "./Header.module.css";
 import { useDisclosure } from "@mantine/hooks";
+import { LoginComponents } from "./login";
+import { SignupComponents } from "./signup";
+import { HeaderLanguage } from "./Header";
+import { useState } from "react";
+import { Avatar, Grid, Group } from "@mantine/core";
+import { UserAvatarDropdown } from "./avatar";
 
-type language = {
-  login: string;
-  signup: string;
-  username: string;
-  typeusername: string;
-};
-
-export function SignupLogin({ t }: { t: language }) {
-  const [opened, { open, close }] = useDisclosure(false);
-
-  return (
-    <>
-      <Button
-        variant="outline"
-        radius="md"
-        className={classes.signup}
-        onClick={open}
-      >
-        {t.login}
-      </Button>
-      <Button variant="filled" radius="md" onClick={open}>
-        {t.signup}
-      </Button>
-      <Modal
-        opened={opened}
-        onClose={close}
-        radius="md"
-        withCloseButton={false}
-      >
-        <TextInput
-          label={t.username}
-          withAsterisk
-          placeholder={t.typeusername}
-          radius="lg"
-        />
-      </Modal>
-    </>
-  );
+// whole components
+export function SignupLogin({
+  t,
+  visibleFrom,
+}: {
+  t: HeaderLanguage;
+  visibleFrom: string;
+}) {
+  const [avatar, setAvatar] = useState("");
+  const [signupOppened, { toggle: signupOpen, close: signupClose }] =
+    useDisclosure(false);
+  const [loginOppened, { toggle: loginOpen, close: loginClose }] =
+    useDisclosure(false);
+  if (avatar != "") {
+    if (visibleFrom === "") {
+      window.location.reload();
+    }
+    return <UserAvatarDropdown t={t} avatar={avatar} />;
+  } else {
+    if (visibleFrom === "") {
+      return (
+        <Grid hiddenFrom="sm">
+          <Grid.Col span={{ base: 12, xs: 6 }}>
+            <LoginComponents
+              t={t}
+              loginOppened={loginOppened}
+              loginOpen={loginOpen}
+              loginClose={loginClose}
+              signupOpen={signupOpen}
+              setAvatar={setAvatar}
+              fullWidth={true}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, xs: 6 }}>
+            <SignupComponents
+              t={t}
+              signupOppened={signupOppened}
+              signupOpen={signupOpen}
+              signupClose={signupClose}
+              loginOpen={loginOpen}
+              setAvatar={setAvatar}
+              fullWidth={true}
+            />
+          </Grid.Col>
+        </Grid>
+      );
+    } else {
+      return (
+        <Group justify="space-between" gap="sm" visibleFrom={visibleFrom}>
+          <LoginComponents
+            t={t}
+            loginOppened={loginOppened}
+            loginOpen={loginOpen}
+            loginClose={loginClose}
+            signupOpen={signupOpen}
+            setAvatar={setAvatar}
+            fullWidth={false}
+          />
+          <SignupComponents
+            t={t}
+            signupOppened={signupOppened}
+            signupOpen={signupOpen}
+            signupClose={signupClose}
+            loginOpen={loginOpen}
+            setAvatar={setAvatar}
+            fullWidth={false}
+          />
+        </Group>
+      );
+    }
+  }
 }
