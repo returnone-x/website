@@ -45,6 +45,13 @@ export default function Home({
     successfulLogin: t("successfulLogin"),
     successfulLoginMessage: t("successfulLoginMessage"),
     invalidEmailOrPassword: t("invalidEmailOrPassword"),
+    logout: t("logout"),
+    profile: t("profile"),
   };
-  return <HeaderComponent t={signipLoginTranslate} locale={locale}/>;
+  return (
+  <>
+  <HeaderComponent t={signipLoginTranslate} locale={locale}/> 
+  test
+  </>
+  );
 }

@@ -43,6 +43,7 @@ export function SignupComponents({
   signupClose,
   loginOpen,
   setAvatar,
+  fullWidth,
 }: {
   t: HeaderLanguage;
   signupOppened: boolean;
@@ -50,6 +51,7 @@ export function SignupComponents({
   signupClose: () => void;
   loginOpen: () => void;
   setAvatar: Dispatch<SetStateAction<string>>;
+  fullWidth: boolean;
 }) {
   const [
     RenameModalStatus,
@@ -167,7 +169,7 @@ export function SignupComponents({
   };
   return (
     <>
-      <Button variant="filled" radius="md" onClick={signupOpen}>
+      <Button variant="filled" radius="md" onClick={signupOpen} fullWidth={fullWidth}>
         {t.signUp}
       </Button>
 

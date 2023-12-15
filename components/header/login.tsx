@@ -36,6 +36,7 @@ export function LoginComponents({
   loginClose,
   signupOpen,
   setAvatar,
+  fullWidth
 }: {
   t: HeaderLanguage;
   loginOppened: boolean;
@@ -43,6 +44,7 @@ export function LoginComponents({
   loginClose: () => void;
   signupOpen: () => void;
   setAvatar: Dispatch<SetStateAction<string>>;
+  fullWidth: boolean;
 }) {
   // if post login and the process are loading
   const [loading, setLoading] = useState(false);
@@ -120,6 +122,7 @@ export function LoginComponents({
         radius="md"
         className={classes.outlinebutton}
         onClick={loginOpen}
+        fullWidth={fullWidth}
       >
         {t.logIn}
       </Button>

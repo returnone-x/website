@@ -2,11 +2,10 @@ import {
   Container,
   Group,
   Text,
-  Button,
   TextInput,
   Space,
   ActionIcon,
-  Avatar,
+  Divider,
 } from "@mantine/core";
 import classes from "./Header.module.css";
 import { HiOutlineSearch, HiOutlineQuestionMarkCircle } from "react-icons/hi";
@@ -16,6 +15,10 @@ import { SignupLogin } from "./auth";
 import { GetAvatarFromServerSide } from "@/api/user/getAvatar";
 import { cookies } from "next/headers";
 import { ChangeLanguage } from "./language";
+import { UserAvatarDropdown } from "./avatar";
+import Link from "next/link";
+import { HamburgerMenu } from "./mobile";
+import { FcGoogle } from "react-icons/fc";
 
 export type HeaderLanguage = {
   signUp: string;
@@ -55,6 +58,8 @@ export type HeaderLanguage = {
   successfulLogin: string;
   successfulLoginMessage: string;
   invalidEmailOrPassword: string;
+  logout: string;
+  profile: string;
 };
 
 export async function HeaderComponent({
@@ -70,27 +75,37 @@ export async function HeaderComponent({
     accessToken ? accessToken.name + "=" + accessToken.value : ""
   );
 
-  const userAvatarOrLogin =
-    avatar != "" ? (
-      <Avatar variant="filled" radius="md" src={avatar} />
-    ) : (
-      <SignupLogin t={t} />
-    );
+  const userAvatar =
+    avatar != "" ? <UserAvatarDropdown t={t} avatar={avatar} /> : <></>;
+  const SignLogin =
+    avatar === "" ? <SignupLogin t={t} visibleFrom="xs" /> : <></>;
 
   return (
     <header className={classes.header}>
       <Container size="1440px" className={classes.container}>
         <Group justify="space-between" gap="xl">
           <Group justify="space-between" gap="sm">
-            <Text fw={700} size="30px" className={classes.centerHorizontal}>
-              returnone
+            <Text
+              fw={700}
+              size="30px"
+              className={classes.centerHorizontal}
+              visibleFrom="xs"
+            >
+              RETURNONE
             </Text>
-            <Space w="xl" className={classes.flexone} visibleFrom="md" />
+            <Text
+              fw={700}
+              size="30px"
+              className={classes.centerHorizontal}
+              hiddenFrom="xs"
+            >
+              <FcGoogle size={30} />
+            </Text>
             <Text
               fw={700}
               size="md"
               className={classes.centerHorizontal}
-              visibleFrom="sm"
+              visibleFrom="md"
             >
               {t.blog}
             </Text>{" "}
@@ -98,7 +113,7 @@ export async function HeaderComponent({
               fw={700}
               size="md"
               className={classes.centerHorizontal}
-              visibleFrom="sm"
+              visibleFrom="md"
             >
               {t.aboutUs}
             </Text>
@@ -109,31 +124,36 @@ export async function HeaderComponent({
             className={classes.textInput}
             radius="lg"
             rightSection={<HiOutlineSearch />}
-            visibleFrom="sm"
+            visibleFrom="md"
           />
-          <Group justify="space-between" gap="sm">
-            <Button
-              leftSection={<HiOutlineQuestionMarkCircle size={20} />}
-              radius="md"
-              variant="gradient"
-              gradient={{ from: "#FFC37D", to: "#FF6B01", deg: 154 }}
-              visibleFrom="md"
+          <Group justify="space-between" gap="md">
+            <Space w="xl" className={classes.flexone} visibleFrom="md" />
+            {SignLogin}
+            <Space w="xl" className={classes.flexone} visibleFrom="md" />
+            {userAvatar}
+            <ActionIcon
+              className={classes.icon}
+              variant="transparent"
+              color="gray"
+              aria-label="Settings"
+              hiddenFrom="md"
             >
-              {t.ask}
-            </Button>
-            <Space w="xl" className={classes.flexone} visibleFrom="md" />
-            {userAvatarOrLogin}
-            <Space w="xl" className={classes.flexone} visibleFrom="md" />
-            <ChangeLanguage />
+              <HiOutlineSearch size={25} className={classes.icon} />
+            </ActionIcon>
+            <Space w="xs" className={classes.flexone} visibleFrom="md" />
+            <ChangeLanguage visibleFrom="sm" />
             <ActionIcon
               variant="subtle"
               aria-label="github"
-              visibleFrom="sm"
               className={classes.icon}
+              visibleFrom="sm"
             >
-              <FaGithub size={25} className={classes.icon}></FaGithub>
+              <Link href="https://github.com/returnone-x" target="_blank">
+                <FaGithub size={25} className={classes.icon} />
+              </Link>
             </ActionIcon>
-            <SetTheme />
+            <SetTheme visibleFrom="sm" />
+            <HamburgerMenu t={t} />
           </Group>
         </Group>
       </Container>

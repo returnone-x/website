@@ -14,7 +14,7 @@ const localsToLanguageName: { [key: string]: string } = {
   "zh-tw": "繁體中文",
 };
 
-export function ChangeLanguage() {
+export function ChangeLanguage({ visibleFrom }: { visibleFrom: string }) {
   const locale = useLocale();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -26,20 +26,25 @@ export function ChangeLanguage() {
       router.replace(pathname, { locale: nextLocale });
     });
   }
-
+  const visibleOrHide =
+    visibleFrom === "" ? (
+      <ActionIcon variant="subtle" aria-label="i18n" className={classes.icon}>
+        <HiTranslate size={25} className={classes.icon} />
+      </ActionIcon>
+    ) : (
+      <ActionIcon
+        variant="subtle"
+        aria-label="i18n"
+        className={classes.icon}
+        visibleFrom={visibleFrom}
+      >
+        <HiTranslate size={25} className={classes.icon} />
+      </ActionIcon>
+    );
   return (
     <>
       <Menu shadow="md" radius="lg">
-        <Menu.Target>
-          <ActionIcon
-            variant="subtle"
-            aria-label="i18n"
-            visibleFrom="sm"
-            className={classes.icon}
-          >
-            <HiTranslate size={25} className={classes.icon} />
-          </ActionIcon>
-        </Menu.Target>
+        <Menu.Target>{visibleOrHide}</Menu.Target>
 
         <Menu.Dropdown>
           {locales.map((cur) => (
