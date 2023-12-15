@@ -36,6 +36,8 @@
     "successfulOauthsignupMessage": "你成功創建了一個Returnone帳號，祝你Coding愉快!",
     "successfulLogin": "成功登入",
     "successfulLoginMessage": "歡迎回來 Returnone!",
-    "invalidEmailOrPassword": "無效的電子郵件或密碼"
+    "invalidEmailOrPassword": "無效的電子郵件或密碼",
+    "logout": "Log out",
+    "profile": "Your profile"
   }
 }
