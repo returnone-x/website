@@ -1,6 +1,15 @@
 .header {
+  height: rem(60px);
+  left: 0;
+  right: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
   margin-bottom: rem(10px);
-  border-bottom: rem(1px) solid
+  border-bottom: rem(2px) solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 

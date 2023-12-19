@@ -1,0 +1,10 @@
+.code-block {
+  position: relative;
+}
+
+.copy-button-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 14px;
+}
