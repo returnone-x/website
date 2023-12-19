@@ -64,10 +64,8 @@ export type HeaderLanguage = {
 
 export async function HeaderComponent({
   t,
-  locale,
 }: {
   t: HeaderLanguage;
-  locale: string;
 }) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken");

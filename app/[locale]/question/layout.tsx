@@ -1,10 +1,11 @@
 import { HeaderComponent } from "@/components/header/Header";
 import { useTranslations } from "next-intl";
+import React from "react";
 
-export default function Home({
-  params: { locale },
+export default function LocaleLayout({
+  children,
 }: {
-  params: { locale: "en" | "zh-tw" };
+  children: React.ReactNode;
 }) {
   const t = useTranslations("Header");
   const signipLoginTranslate = {
@@ -49,9 +50,9 @@ export default function Home({
     profile: t("profile"),
   };
   return (
-  <>
-  <HeaderComponent t={signipLoginTranslate}/> 
-  test
-  </>
+    <>
+      <HeaderComponent t={signipLoginTranslate} />
+      {children}
+    </>
   );
 }

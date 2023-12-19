@@ -10,6 +10,7 @@ import {
   Container,
   Divider,
   Stack,
+  Space,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { HeaderLanguage } from "./Header";
@@ -37,16 +38,8 @@ export function HamburgerMenu({ t }: { t: HeaderLanguage }) {
         opened={opened}
         onClose={toggle}
         hiddenFrom="md"
-        title={
-          <Text
-            fw={700}
-            size="30px"
-            className={classes.centerHorizontal}
-          >
-            RETURNONE
-          </Text>
-        }
       >
+        <Space h="md" />
         <Center>
           <Group justify="space-between" gap="xl">
             <ChangeLanguage visibleFrom="" />
