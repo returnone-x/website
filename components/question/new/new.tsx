@@ -34,7 +34,7 @@ type NewQuestionLanguage = {
   titleMustBeLessThan250Letters: string;
   pleasEnterTags: string;
   toMuchContent: string;
-  pleaseEnterSomeContent: string;
+  pleaseEnterDescriptions: string;
   content: string;
   reviewYourQuestion: string;
   askANewQuestion: string;
@@ -84,7 +84,7 @@ export function NewQuestion({ t }: { t: NewQuestionLanguage }) {
 
     if (content.length === 0 || content === "<p></p>") {
       isError = true;
-      setContentError(t.pleaseEnterSomeContent);
+      setContentError(t.pleaseEnterDescriptions);
     } else if (content.length > 100000) {
       isError = true;
       setContentError(t.toMuchContent);
