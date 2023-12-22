@@ -34,7 +34,7 @@ type NewQuestionLanguage = {
   titleMustBeLessThan250Letters: string;
   pleasEnterTags: string;
   toMuchContent: string;
-  pleaseEnterSomeContent: string;
+  pleaseEnterDescriptions: string;
   content: string;
   reviewYourQuestion: string;
   askANewQuestion: string;
@@ -45,11 +45,17 @@ type TagInfo = {
   version: string;
 };
 
-function convertToTagInfoArray(tags: string[]): TagInfo[] {
-  return tags.map((tag) => {
+function convertToTagInfoArray(tags: string[]): [string[], string[]] {
+  const tags_name: string[] = [];
+  const tags_version: string[] = [];
+
+  tags.forEach((tag) => {
     const [tagName, version] = tag.split(":");
-    return { tag: tagName, version: version ? version : "" };
+    tags_name.push(tagName);
+    tags_version.push(version);
   });
+
+  return [tags_name, tags_version];
 }
 
 export function NewQuestion({ t }: { t: NewQuestionLanguage }) {
@@ -84,7 +90,7 @@ export function NewQuestion({ t }: { t: NewQuestionLanguage }) {
 
     if (content.length === 0 || content === "<p></p>") {
       isError = true;
-      setContentError(t.pleaseEnterSomeContent);
+      setContentError(t.pleaseEnterDescriptions);
     } else if (content.length > 100000) {
       isError = true;
       setContentError(t.toMuchContent);
@@ -95,8 +101,9 @@ export function NewQuestion({ t }: { t: NewQuestionLanguage }) {
     if (isError) {
       setLoading(false);
     } else {
-      const result: TagInfo[] = convertToTagInfoArray(tags);
-      const res = await newQuestionPost(title, content, result);
+      
+      const result = convertToTagInfoArray(tags);
+      const res = await newQuestionPost(title, content, result[0], result[1]);
       if (res.status === 200) {
         console.log("done");
       } else {

@@ -44,14 +44,14 @@
     "title": "Title",
     "pleaseEnterATitle": "Please enter a title",
     "tags": "Tags",
-    "content": "Content",
-    "pleaseEnterTags": "Please enter Tags",
-    "pickTagsTips": "The maximum number of tags is five, please use \"language:version\"(version is not required),It is recommended to have at least a language and a framework or package e.g. \"nodejs:20.10\" \"nextjs:14.03\"",
+    "content": "Descriptions",
+    "pleaseEnterTags": "Please enter tags",
+    "pickTagsTips": "The maximum number of tags is five, please use \"language:version\"(version is optional),It is recommended to have at least a language and a framework or package e.g. \"nodejs:20.10\" \"nextjs:14.03\"",
     "howToAskAGoodQuestion": "How to ask a good question?",
     "titleMustBeLessThan250Letters": "Title must be less than 250 letters",
     "pleasEnterTags": "Please enter tags",
     "toMuchContent": "Too much content",
-    "pleaseEnterSomeContent": "Please enter some content",
+    "pleaseEnterDescriptions": "Please enter descriptions",
     "reviewYourQuestion": "Review your question",
     "askANewQuestion": "Ask a new question!"
   }

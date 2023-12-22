@@ -9,12 +9,14 @@ type TagInfo = {
 export async function newQuestionPost(
   title: string,
   content: string,
-  tags: TagInfo[]
+  tags_name: string[],
+  tags_version: string[],
 ) {
   let data = JSON.stringify({
     title: title,
     content: content,
-    tags: tags,
+    tags_name: tags_name,
+    tags_version: tags_version
   });
   let config = {
     method: "post",

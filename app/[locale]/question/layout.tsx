@@ -1,5 +1,6 @@
 import { HeaderComponent } from "@/components/header/Header";
 import { useTranslations } from "next-intl";
+import { cookies } from "next/headers";
 import React from "react";
 
 export default function LocaleLayout({

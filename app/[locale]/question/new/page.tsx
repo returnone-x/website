@@ -14,7 +14,7 @@ export default function NewQuestionPage() {
     titleMustBeLessThan250Letters: t("titleMustBeLessThan250Letters"),
     pleasEnterTags: t("pleasEnterTags"),
     toMuchContent: t("toMuchContent"),
-    pleaseEnterSomeContent: t("pleaseEnterSomeContent"),
+    pleaseEnterDescriptions: t("pleaseEnterDescriptions"),
     content: t("content"),
     reviewYourQuestion: t("reviewYourQuestion"),
     askANewQuestion: t("askANewQuestion"),

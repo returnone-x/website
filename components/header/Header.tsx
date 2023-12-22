@@ -72,7 +72,6 @@ export async function HeaderComponent({
   const avatar = await getAvatar(
     accessToken ? accessToken.name + "=" + accessToken.value : ""
   );
-
   const userAvatar =
     avatar != "" ? <UserAvatarDropdown t={t} avatar={avatar} /> : <></>;
   const SignLogin =
