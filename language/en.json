@@ -46,7 +46,7 @@
     "tags": "Tags",
     "content": "Descriptions",
     "pleaseEnterTags": "Please enter tags",
-    "pickTagsTips": "The maximum number of tags is five, please use \"language:version\"(version is not required),It is recommended to have at least a language and a framework or package e.g. \"nodejs:20.10\" \"nextjs:14.03\"",
+    "pickTagsTips": "The maximum number of tags is five, please use \"language:version\"(version is optional),It is recommended to have at least a language and a framework or package e.g. \"nodejs:20.10\" \"nextjs:14.03\"",
     "howToAskAGoodQuestion": "How to ask a good question?",
     "titleMustBeLessThan250Letters": "Title must be less than 250 letters",
     "pleasEnterTags": "Please enter tags",

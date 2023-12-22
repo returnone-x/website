@@ -24,7 +24,7 @@ export function UserAvatarDropdown({
         window.location.reload();
       }
     };
-    setInterval(() => {refreshTokenFunction()}, 10 * 60 * 1000);
+    setInterval(() => {refreshTokenFunction()}, 20 * 60 * 1000);
   }, []);
   const logout = async () => {
     const res = await getLogout();
