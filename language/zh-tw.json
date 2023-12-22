@@ -44,14 +44,14 @@
     "title": "標題",
     "pleaseEnterATitle": "請輸入標題",
     "tags": "標籤",
-    "content": "內容",
-    "pleaseEnterTags": "請輸入標籤",
-    "pickTagsTips": "標籤最多可以選取5個，請使用: \"語言:版本\"(版本不是必須),建議標籤至少包含語言以及框架或套件，例如: \"nodejs:20.10\"、\"nextjs:14.03\"",
+    "content": "Descriptions",
+    "pleaseEnterTags": "Please enter tags",
+    "pickTagsTips": "The maximum number of tags is five, please use \"language:version\"(version is optional),It is recommended to have at least a language and a framework or package e.g. \"nodejs:20.10\" \"nextjs:14.03\"",
     "howToAskAGoodQuestion": "如何問出一個好問題?",
     "titleMustBeLessThan250Letters": "標題必須少於250字",
     "pleasEnterTags": "請輸入標籤",
     "toMuchContent": "內容太多了",
-    "pleaseEnterSomeContent": "請輸入內容",
+    "pleaseEnterDescriptions": "Please enter descriptions",
     "reviewYourQuestion": "檢視你的問題",
     "askANewQuestion": "提出一個新問題!"
   }
