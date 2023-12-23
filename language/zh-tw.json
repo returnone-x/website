@@ -39,5 +39,20 @@
     "invalidEmailOrPassword": "無效的電子郵件或密碼",
     "logout": "登出",
     "profile": "個人資料"
+  },
+  "NewQuestion": {
+    "title": "標題",
+    "pleaseEnterATitle": "請輸入標題",
+    "tags": "標籤",
+    "content": "敘述",
+    "pleaseEnterTags": "請輸入標籤",
+    "pickTagsTips": "標籤最多可以選取5個，請使用: \"語言:版本\"(版本為選填),建議標籤至少包含語言以及框架或套件，例如: \"nodejs:20.10\"、\"nextjs:14.03\"",
+    "howToAskAGoodQuestion": "如何問出一個好問題?",
+    "titleMustBeLessThan250Letters": "標題必須少於250字",
+    "pleasEnterTags": "請輸入標籤",
+    "toMuchContent": "內容太多了",
+    "pleaseEnterDescriptions": "請輸入描述內容",
+    "reviewYourQuestion": "檢視你的問題",
+    "askANewQuestion": "提出一個新問題!"
   }
 }
