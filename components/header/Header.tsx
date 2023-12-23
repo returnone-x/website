@@ -68,9 +68,9 @@ export async function HeaderComponent({
   t: HeaderLanguage;
 }) {
   const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken");
+  const refreshToken = cookieStore.get("refreshToken");
   const avatar = await getAvatar(
-    accessToken ? accessToken.name + "=" + accessToken.value : ""
+    refreshToken ? refreshToken.name + "=" + refreshToken.value : ""
   );
   const userAvatar =
     avatar != "" ? <UserAvatarDropdown t={t} avatar={avatar} /> : <></>;
@@ -158,8 +158,8 @@ export async function HeaderComponent({
   );
 }
 
-async function getAvatar(accessToken: string) {
-  const res = await GetAvatarFromServerSide(accessToken);
+async function getAvatar(refreshToken: string) {
+  const res = await GetAvatarFromServerSide(refreshToken);
 
   if (res.status != 200) {
     return "";

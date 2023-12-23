@@ -115,9 +115,6 @@ export function NewQuestion({ t }: { t: NewQuestionLanguage }) {
 
   return (
     <>
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
       <Text
         size="60px"
         fw={900}

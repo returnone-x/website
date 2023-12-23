@@ -1,5 +1,5 @@
 import "./codeBlock.css";
-import React, { ChangeEvent, useRef } from "react";
+import React from "react";
 import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
 import { CopyButton, ActionIcon } from "@mantine/core";
 import { HiClipboard, HiClipboardCheck } from "react-icons/hi";

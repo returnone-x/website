@@ -54,3 +54,7 @@
       margin: 2rem 0;
     }
   }
+
+.viewMode {
+  outline: none;
+}

@@ -37,6 +37,7 @@ export function TiptapEditor({changeContent}: {changeContent: Dispatch<SetStateA
       const html = editor.getHTML()
       changeContent(html)
     },
+    
   });
 
   return (
@@ -46,13 +47,9 @@ export function TiptapEditor({changeContent}: {changeContent: Dispatch<SetStateA
           <RichTextEditor.Bold />
           <RichTextEditor.Italic />
           <RichTextEditor.Strikethrough />
+          <RichTextEditor.H2 />
           <RichTextEditor.Code />
           <RichTextEditor.CodeBlock icon={BiCodeBlock} />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.H1 />
-          <RichTextEditor.H2 />
         </RichTextEditor.ControlsGroup>
 
         <RichTextEditor.ControlsGroup>
