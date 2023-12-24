@@ -8,14 +8,10 @@ export async function QuestionDetill({ questionId }: { questionId: string }) {
   if (questionDetill === "") {
     return notFound();
   }
-  const render = questionDetill ? (
-    <DetillCompnent questionDetill={questionDetill} />
-  ) : (
-    <></>
-  );
+
   return (
     <>
-      {render}
+      <DetillCompnent questionDetill={questionDetill} />
     </>
   );
 }
