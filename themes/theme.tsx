@@ -45,9 +45,11 @@ export const resolver: CSSVariablesResolver = (theme) => ({
   light: {
     "--mantine-color-body": theme.other.lightBackground,
     "--mantine-color-deep-orange": theme.other.deepOrangeLight,
+    "--mantine-color-text": "#000000"
   },
   dark: {
     "--mantine-color-body": theme.other.deepBackground,
     "--mantine-color-deep-orange": theme.other.deepOrangeDark,
+    "--mantine-color-text": "#ffffff"
   },
 });

@@ -18,6 +18,8 @@ export default function NewQuestionPage() {
     content: t("content"),
     reviewYourQuestion: t("reviewYourQuestion"),
     askANewQuestion: t("askANewQuestion"),
+    errorWhenPostQuestionTitle: t("errorWhenPostQuestionTitle"),
+    errorWhenPostQuestionDes: t("errorWhenPostQuestionDes")
   };
   return (
     <Container size="xl">

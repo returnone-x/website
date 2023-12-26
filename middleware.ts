@@ -33,7 +33,7 @@ export default async function middleware(request: NextRequest) {
         return response;
       }
       response.headers.set("set-cookie", res.headers.get("set-cookie"));
-      
+
       return response;
     }
   }

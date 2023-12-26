@@ -25,8 +25,8 @@ export default function RootLayout({
           cssVariablesResolver={resolver}
           defaultColorScheme="dark"
         >
-          <Notifications />
           {children}
+          <Notifications />
         </MantineProvider>
       </body>
     </html>

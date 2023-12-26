@@ -18,11 +18,12 @@ import {
   Box,
 } from "@mantine/core";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
-import { HiEye } from "react-icons/hi";
-import { useForm } from "@mantine/form";
+import { HiEmojiSad, HiEye } from "react-icons/hi";
 import { useState } from "react";
 import classes from "./New.module.css";
 import { newQuestionPost } from "@/api/question/newQuestion";
+import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/navigation";
 
 type NewQuestionLanguage = {
   title: string;
@@ -38,11 +39,8 @@ type NewQuestionLanguage = {
   content: string;
   reviewYourQuestion: string;
   askANewQuestion: string;
-};
-
-type TagInfo = {
-  tag: string;
-  version: string;
+  errorWhenPostQuestionTitle: string;
+  errorWhenPostQuestionDes: string;
 };
 
 function convertToTagInfoArray(tags: string[]): [string[], string[]] {
@@ -59,6 +57,8 @@ function convertToTagInfoArray(tags: string[]): [string[], string[]] {
 }
 
 export function NewQuestion({ t }: { t: NewQuestionLanguage }) {
+  const router = useRouter();
+  
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -105,19 +105,23 @@ export function NewQuestion({ t }: { t: NewQuestionLanguage }) {
       const result = convertToTagInfoArray(tags);
       const res = await newQuestionPost(title, content, result[0], result[1]);
       if (res.status === 200) {
-        console.log("done");
+        router.replace(res.data.data.id)
       } else {
-        console.log("error");
+        notifications.show({
+          color: "red",
+          title: t.errorWhenPostQuestionTitle,
+          message: t.errorWhenPostQuestionDes + "\n" + res.data.error,
+          icon: <HiEmojiSad size={25} />,
+          classNames: classes,
+          autoClose: 5000,
+        });
+        setLoading(false);
       }
-      setLoading(false);
     }
   };
 
   return (
     <>
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
       <Text
         size="60px"
         fw={900}

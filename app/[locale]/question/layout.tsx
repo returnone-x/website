@@ -1,4 +1,5 @@
 import { HeaderComponent } from "@/components/header/Header";
+import { Space } from "@mantine/core";
 import { useTranslations } from "next-intl";
 import { cookies } from "next/headers";
 import React from "react";
@@ -53,6 +54,9 @@ export default function LocaleLayout({
   return (
     <>
       <HeaderComponent t={signipLoginTranslate} />
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
       {children}
     </>
   );

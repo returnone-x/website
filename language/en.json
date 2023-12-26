@@ -52,7 +52,18 @@
     "pleasEnterTags": "Please enter tags",
     "toMuchContent": "Too much content",
     "pleaseEnterDescriptions": "Please enter descriptions",
-    "reviewYourQuestion": "Review your question",
-    "askANewQuestion": "Ask a new question!"
+    "reviewYourQuestion": "Post and Review your question",
+    "askANewQuestion": "Ask a new question!",
+    "errorWhenPostQuestionTitle": "Error when post question",
+    "errorWhenPostQuestionDes": "Error when post new quesiton to the backend please try it later"
+  },
+  "GetQuestion": {
+    "views": "views",
+    "postAt": "post at",
+    "updateAt": "update at",
+    "edited": "edited",
+    "loadMore": "Load more",
+    "vote": "Vote",
+    "voted": "Voted"
   }
 }
