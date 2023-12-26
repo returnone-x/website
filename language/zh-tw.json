@@ -52,7 +52,18 @@
     "pleasEnterTags": "請輸入標籤",
     "toMuchContent": "內容太多了",
     "pleaseEnterDescriptions": "請輸入描述內容",
-    "reviewYourQuestion": "檢視你的問題",
-    "askANewQuestion": "提出一個新問題!"
+    "reviewYourQuestion": "發布並檢視你的提問",
+    "askANewQuestion": "提出一個新問題!",
+    "errorWhenPostQuestionTitle": "在發布問題時出現錯誤",
+    "errorWhenPostQuestionDes": "在發布問題時出現錯誤，請等待一段時間後再試一次!"
+  },
+  "GetQuestion": {
+    "views": "瀏覽數",
+    "postAt": "發布於",
+    "updateAt": "更新於",
+    "edited": "已編輯",
+    "loadMore": "載入更多",
+    "vote": "投票",
+    "voted": "已投票"
   }
 }
