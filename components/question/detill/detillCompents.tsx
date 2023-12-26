@@ -9,7 +9,6 @@ import {
   Group,
   Text,
   ActionIcon,
-  Tooltip,
   Menu,
   Avatar,
   Flex,
@@ -29,11 +28,18 @@ import {
 } from "react-icons/hi";
 import { FaRegShareSquare } from "react-icons/fa";
 import { MdOutlineLibraryAdd } from "react-icons/md";
+import { QuestionUpvote } from "@/api/question/questionUpVote";
+import { QuestionDownVote } from "@/api/question/questionDownVote";
+import { useState } from "react";
+import { DeleteQuesitonVote } from "@/api/question/deleteQuestionVote";
+import { QuestionLanguage } from "./detill";
 
 export function DetillCompnent({
   questionDetill,
+  t,
 }: {
   questionDetill: AxiosResponse<any, any>;
+  t: QuestionLanguage;
 }) {
   function fullBadges() {
     const badges = [];
@@ -62,18 +68,35 @@ export function DetillCompnent({
               wrap="wrap"
             >
               {fullBadges().map((badgeName, index) => (
-                <Badge key={index} size="sm">
+                <Badge key={index} size="xs">
                   {badgeName}
                 </Badge>
               ))}
+            </Flex>
+            <Flex
+              gap="xs"
+              justify="flex-start"
+              align="center"
+              direction="row"
+              wrap="wrap"
+            >
+              <Text fw={700} size="xs" c="#868e96">
+                {t.views}: 100k
+              </Text>
+              <Text fw={700} size="xs" c="#868e96">
+                {t.postAt}: 10k
+              </Text>
+              <Text fw={700} size="xs" c="#868e96">
+                {t.updateAt}: 10k
+              </Text>
             </Flex>
             <Divider />
           </Stack>
           <TiptapVewContent content={questionDetill.data.content} />
           <Group justify="space-between">
-            <Toolbar />
+            <Toolbar questionDetill={questionDetill} t={t}/>
           </Group>
-          <Comment />
+          <Comment questionDetill={questionDetill} t={t}/>
           <Divider />
           <Space />
         </Stack>
@@ -82,7 +105,13 @@ export function DetillCompnent({
   );
 }
 
-function Comment() {
+function Comment({
+  questionDetill,
+  t,
+}: {
+  questionDetill: AxiosResponse<any, any>;
+  t: QuestionLanguage;
+}) {
   function SubComment() {
     return (
       <Flex
@@ -100,14 +129,16 @@ function Comment() {
           <Flex
             gap="xs"
             justify="flex-start"
-            align="flex-end"
+            align="center"
             direction="row"
             wrap="nowrap"
           >
             <Text size="md" fw={700} truncate="end">
               Night Cat
             </Text>
-            <Text size="xs">2024/1/1 19:50 (edited)</Text>
+            <Text size="xs" c="#868e96">
+              2024/1/1 19:50 ({t.edited})
+            </Text>
           </Flex>
           <Text size="md">
             i think you are really so suck bla bla bla bla bla bla bla bla bla
@@ -129,7 +160,7 @@ function Comment() {
           <SubComment />
           <Center>
             <Button variant="transparent" leftSection={<HiCloudDownload />}>
-              Load more
+              {t.loadMore}
             </Button>
           </Center>
         </Stack>
@@ -138,22 +169,93 @@ function Comment() {
   );
 }
 
-function Toolbar() {
+function Toolbar({
+  questionDetill,
+  t,
+}: {
+  questionDetill: AxiosResponse<any, any>;
+  t: QuestionLanguage;
+}) {
+  const [voteStatus, setVoteStatus] = useState(questionDetill.data.user_vote);
+  const [newVote, setNewVote] = useState(0);
+
+  const upVoteFunction = async () => {
+    if (voteStatus === 1) {
+      return noVoteFunction();
+    }
+    setVoteStatus(1);
+    if (questionDetill.data.user_vote === 1) {
+      setNewVote(0);
+    } else if (questionDetill.data.user_vote === 2) {
+      setNewVote(2);
+    } else {
+      setNewVote(1);
+    }
+    await QuestionUpvote(questionDetill.data.id);
+  };
+
+  const downVoteFunction = async () => {
+    if (voteStatus === 2) {
+      return noVoteFunction();
+    }
+    setVoteStatus(2);
+    if (questionDetill.data.user_vote === 2) {
+      setNewVote(0);
+    } else if (questionDetill.data.user_vote === 1) {
+      setNewVote(-2);
+    } else {
+      setNewVote(-1);
+    }
+    await QuestionDownVote(questionDetill.data.id);
+  };
+
+  const noVoteFunction = async () => {
+    if (voteStatus === 0) {
+      return;
+    }
+    setVoteStatus(0);
+    if (questionDetill.data.user_vote === 1) {
+      setNewVote(-1);
+    } else if (questionDetill.data.user_vote === 2) {
+      setNewVote(1);
+    } else {
+      setNewVote(0);
+    }
+    await DeleteQuesitonVote(questionDetill.data.id);
+  };
+
   return (
     <Group gap="10px">
       <ActionIcon
+        onClick={() => upVoteFunction()}
         variant="transparent"
         aria-label="Settings"
-        className={classes.icon}
+        className={voteStatus === 1 ? classes.upIcon : classes.normalIcon}
         size="lg"
       >
         <TbArrowBigUp size={30} />
       </ActionIcon>
-      <Text fw={700}>10</Text>
+      <Text
+        fw={700}
+        className={
+          voteStatus === 0
+            ? classes.normalIcon
+            : voteStatus === 1
+            ? classes.upIcon
+            : classes.downIcon
+        }
+      >
+        {questionDetill.data.vote_count + newVote <= 0
+          ? voteStatus === 0
+            ? t.vote
+            : t.voted
+          : questionDetill.data.vote_count + newVote}
+      </Text>
       <ActionIcon
+        onClick={() => downVoteFunction()}
         variant="transparent"
         aria-label="Settings"
-        className={classes.icon}
+        className={voteStatus === 2 ? classes.downIcon : classes.normalIcon}
         size="lg"
       >
         <TbArrowBigDown size={30} />
@@ -162,7 +264,7 @@ function Toolbar() {
         <ActionIcon
           variant="transparent"
           aria-label="Settings"
-          className={classes.icon}
+          className={classes.normalIcon}
           size="lg"
         >
           <HiOutlineAnnotation size={30} />
@@ -172,7 +274,7 @@ function Toolbar() {
       <ActionIcon
         variant="transparent"
         aria-label="Settings"
-        className={classes.icon}
+        className={classes.normalIcon}
         size="lg"
       >
         <FaRegShareSquare size={30} />
@@ -180,7 +282,7 @@ function Toolbar() {
       <ActionIcon
         variant="transparent"
         aria-label="Settings"
-        className={classes.icon}
+        className={classes.normalIcon}
         size="lg"
       >
         <MdOutlineLibraryAdd size={30} />
@@ -190,7 +292,7 @@ function Toolbar() {
           <ActionIcon
             variant="transparent"
             aria-label="Settings"
-            className={classes.icon}
+            className={classes.normalIcon}
             size="lg"
           >
             <HiDotsHorizontal size={30} />

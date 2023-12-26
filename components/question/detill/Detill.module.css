@@ -1,6 +1,14 @@
-.icon {
-    color: light-dark(
-      var(--mantine-color-white-10),
-      var(--mantine-color-white-5)
-    );
-  }
+.normalIcon {
+  color: light-dark(
+    var(--mantine-color-white-10),
+    var(--mantine-color-white-5)
+  );
+}
+
+.upIcon {
+  color: var(--mantine-color-green-5);
+}
+
+.downIcon {
+  color: var(--mantine-color-red-9);
+}

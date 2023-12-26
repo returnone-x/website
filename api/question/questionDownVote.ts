@@ -1,14 +1,20 @@
 import { API_URL } from "@/config/config";
 import axios from "axios";
 
-export async function GetQuesiton(questionId: string, cookies: string) {
+type TagInfo = {
+  tag: string;
+  version: string;
+};
+
+export async function QuestionDownVote(
+  question_id: string,
+) {
   let config = {
-    method: "get",
+    method: "post",
     maxBodyLength: Infinity,
-    url: API_URL + `/public/question/${questionId}`,
+    url: API_URL + `/user/question/downvote/${question_id}`,
     headers: {
       "Content-Type": "application/json",
-      Cookie: cookies,
     },
     validateStatus: function () {
       return true;
