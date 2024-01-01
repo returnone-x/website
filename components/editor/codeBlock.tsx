@@ -1,8 +1,6 @@
-import "./codeBlock.css";
 import React from "react";
 import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
-import { CopyButton, ActionIcon } from "@mantine/core";
-import { HiClipboard, HiClipboardCheck } from "react-icons/hi";
+import classes from './Codeblock.module.css'
 
 interface CodeBlockProps {
   node: {
@@ -29,23 +27,9 @@ const CodeBlockComponent: React.FC<CodeBlockProps> = ({
   extension,
 }) => {
   return (
-    <NodeViewWrapper className="code-block">
-      <div className="copy-button-container">
-        <CopyButton value={"test"}>
-          {({ copied, copy }) => (
-            <ActionIcon
-              variant="outline"
-              color={copied ? "green" : "gray"}
-              aria-label="Settings"
-              onClick={copy}
-            >
-              {copied ? <HiClipboardCheck /> : <HiClipboard />}
-            </ActionIcon>
-          )}
-        </CopyButton>
-      </div>
-      <pre>
-        <NodeViewContent as="code" />
+    <NodeViewWrapper className={classes.codeblock}>
+      <pre className={classes.codeblock}>
+        <NodeViewContent as="code" className={classes.codeblock} />
       </pre>
     </NodeViewWrapper>
   );

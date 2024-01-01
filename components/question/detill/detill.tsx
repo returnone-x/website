@@ -12,7 +12,9 @@ export type QuestionLanguage = {
   loadMore: string;
   vote: string;
   voted: string;
+  answer: string;
 }
+
 export async function QuestionDetill({ questionId, t }: { questionId: string, t: QuestionLanguage }) {
   const cookieStore = cookies();
   const refreshToken = cookieStore.get("accessToken");

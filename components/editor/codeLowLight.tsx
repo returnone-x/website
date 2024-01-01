@@ -27,7 +27,9 @@ import coffeescript from "highlight.js/lib/languages/coffeescript";
 export const Registerlowlight = createLowlight(common);
 
 Registerlowlight.register("ts", ts);
+Registerlowlight.register("tsx", ts);
 Registerlowlight.register("js", js);
+Registerlowlight.register("jsx", js);
 Registerlowlight.register("py", py);
 Registerlowlight.register("go", go);
 Registerlowlight.register("rust", rust);

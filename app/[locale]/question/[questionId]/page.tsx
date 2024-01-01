@@ -17,12 +17,13 @@ export default function questionPage({
     edited: t("edited"),
     loadMore: t("loadMore"),
     vote: t("vote"),
-    voted: t("voted")
+    voted: t("voted"),
+    answer: t("answer")
   };
 
 
   return (
-    <Container size="xl">
+    <Container size="1450px">
       <QuestionDetill questionId={questionId} t={signipLoginTranslate}/>
     </Container>
   );

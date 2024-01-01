@@ -64,6 +64,9 @@
     "edited": "edited",
     "loadMore": "Load more",
     "vote": "Vote",
-    "voted": "Voted"
+    "voted": "Voted",
+    "answer": "Answer !",
+    "comment": "comment",
+    "answerThisQuestion": "Answer this question!"
   }
 }
