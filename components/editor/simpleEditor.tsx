@@ -16,7 +16,7 @@ import { Dispatch, SetStateAction } from "react";
 const lowlight = Registerlowlight;
 
 const content = ""
-export function TiptapEditor({changeContent}: {changeContent: Dispatch<SetStateAction<string>>}) {
+export function SimpleEditor({changeContent}: {changeContent: Dispatch<SetStateAction<string>>}) {
   const editor = useEditor({
     extensions: [
       Underline,
@@ -40,7 +40,7 @@ export function TiptapEditor({changeContent}: {changeContent: Dispatch<SetStateA
   });
 
   return (
-    <RichTextEditor editor={editor} spellCheck={false} withCodeHighlightStyles>
+    <RichTextEditor editor={editor} spellCheck={false}>
       <RichTextEditor.Toolbar sticky stickyOffset={60}>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
@@ -59,12 +59,6 @@ export function TiptapEditor({changeContent}: {changeContent: Dispatch<SetStateA
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Link />
           <RichTextEditor.Unlink />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.AlignLeft />
-          <RichTextEditor.AlignCenter />
-          <RichTextEditor.AlignRight />
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 

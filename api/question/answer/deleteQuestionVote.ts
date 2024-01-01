@@ -1,17 +1,11 @@
 import { API_URL } from "@/config/config";
 import axios from "axios";
 
-export async function QuestionUpvote(
-  question_id: string,
-) {
-  
+export async function DeleteQuestionAnserVote(answerId: string) {
   let config = {
-    method: "post",
+    method: "delete",
     maxBodyLength: Infinity,
-    url: API_URL + `/user/question/upvote/${question_id}`,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    url: API_URL + `/user/question/deletevote/${answerId}`,
     validateStatus: function () {
       return true;
     },

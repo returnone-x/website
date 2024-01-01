@@ -1,11 +1,6 @@
 import { API_URL } from "@/config/config";
 import axios from "axios";
 
-type TagInfo = {
-  tag: string;
-  version: string;
-};
-
 export async function QuestionDownVote(
   question_id: string,
 ) {
