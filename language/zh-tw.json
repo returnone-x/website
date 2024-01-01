@@ -64,6 +64,9 @@
     "edited": "已編輯",
     "loadMore": "載入更多",
     "vote": "投票",
-    "voted": "已投票"
+    "voted": "已投票",
+    "answer": "Answer !",
+    "comment": "comment",
+    "answerThisQuestion": "Answer this question!"
   }
 }
