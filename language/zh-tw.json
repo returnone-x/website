@@ -59,16 +59,16 @@
   },
   "GetQuestion": {
     "views": "瀏覽數",
-    "askAt": "Asked at",
+    "askAt": "提問於",
     "updateAt": "更新於",
     "edited": "已編輯",
     "loadMore": "載入更多",
     "vote": "投票",
     "voted": "已投票",
-    "answer": "Answer !",
-    "comment": "comment",
-    "answerThisQuestion": "Answer this question!",
-    "warnDeleteAnswer": "Are you sure delete this answer?",
+    "answer": "立即回答!",
+    "comment": "評論",
+    "answerThisQuestion": "立即回答這個問題!",
+    "warnDeleteAnswer": "你是否確定要刪除這個答案?",
     "warnDeleteAnswerDetil": "If you delete this answer, it cannot be recovered!",
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -78,6 +78,6 @@
     "warnDeleteQuestion": "Are you sure delete this question?",
     "warnDeleteQuestionDetil": "If you delete this question, it cannot be recovered!",
     "successfulDeleteQuestion": "Successful Delete Question",
-    "successfulDeleteQuestionDetil": "You have successful delete this question!"
+    "successfulDeleteQuestionDetil": "你成功刪除這個提問!"
   }
 }
