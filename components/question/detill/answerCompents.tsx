@@ -1,19 +1,45 @@
 "use client";
 
-import { Divider, Stack, Group, Text, ActionIcon, Menu } from "@mantine/core";
-import { AxiosResponse } from "axios";
 import "@mantine/tiptap/styles.css";
+import {
+  Divider,
+  Stack,
+  Group,
+  Text,
+  ActionIcon,
+  Menu,
+  Avatar,
+  Box,
+  Title,
+  Flex,
+} from "@mantine/core";
+import { AxiosResponse } from "axios";
 import { TiptapVewContent } from "@/components/editor/editorViewContent";
 import { TbArrowBigDown, TbArrowBigUp } from "react-icons/tb";
 import classes from "./Detill.module.css";
-import { HiOutlineAnnotation, HiDotsHorizontal } from "react-icons/hi";
 import { FaRegShareSquare } from "react-icons/fa";
 import { MdOutlineLibraryAdd } from "react-icons/md";
 import { useState } from "react";
 import { QuestionLanguage } from "./detill";
 import { QuestionAnswerUpVote } from "@/api/question/answer/questionAnsweUpVote";
 import { QuestionAnswerDownVote } from "@/api/question/answer/questionAnsweDownVote";
-import { DeleteQuestionAnserVote } from "@/api/question/answer/deleteQuestionVote";
+import { DeleteQuestionAnswerVote } from "@/api/question/answer/deleteQuestionVote";
+import moment from "moment";
+import { TimeDisplay } from "@/config/config";
+import { getCookie } from "cookies-next";
+import { modals } from "@mantine/modals";
+import { TiWarning } from "react-icons/ti";
+
+import {
+  HiOutlineAnnotation,
+  HiDotsHorizontal,
+  HiOutlineFlag,
+  HiOutlineTrash,
+  HiCheckCircle,
+} from "react-icons/hi";
+import { DeleteQuestionAnswer } from "@/api/question/answer/deleteQuestionAnswer";
+import { notifications } from "@mantine/notifications";
+import { theme } from "@/themes/theme";
 
 export type answersType = {
   id: string;
@@ -21,6 +47,7 @@ export type answersType = {
   user_id: string;
   content: string;
   avatar: string;
+  user_name: string;
   up_vote: number;
   down_vote: number;
   user_vote: number;
@@ -35,15 +62,51 @@ export function ShowAnswer({
   questionDetill: AxiosResponse<any, any>;
   t: QuestionLanguage;
 }) {
+  const dt = new Date();
+  let diffTZ = -dt.getTimezoneOffset();
+
   return (
     <>
       {questionDetill.data.answers?.map(
         (answer: answersType, index: number) => (
           <Stack key={answer.id}>
             <TiptapVewContent content={answer.content} />
-            <Group justify="space-between">
+            <Group wrap="nowrap" justify="space-between" visibleFrom="xs">
               <AnswerToolbar answerData={answer} t={t} />
+              <Group justify="flex-end" wrap="nowrap">
+                <Avatar variant="filled" radius="sm" src={answer.avatar} />
+                <Stack gap="0px">
+                  <Text size="xs" className={classes.grayIcon}>
+                    {t.askAt}:{" "}
+                    {moment(answer.create_at)
+                      .utcOffset(diffTZ)
+                      .format(TimeDisplay)}
+                  </Text>
+                  <Text size="md" truncate="end">
+                    {answer.user_name}
+                  </Text>
+                </Stack>
+              </Group>
             </Group>
+
+            <Stack hiddenFrom="xs">
+              <Group justify="flex-start">
+                <Avatar variant="filled" radius="sm" src={answer.avatar} />
+                <Stack gap="0px">
+                  <Text size="xs" className={classes.grayIcon}>
+                    {t.askAt}:{" "}
+                    {moment(answer.create_at)
+                      .utcOffset(diffTZ)
+                      .format(TimeDisplay)}
+                  </Text>
+                  <Text size="md" truncate="end">
+                    {answer.user_name}
+                  </Text>
+                </Stack>
+              </Group>
+              <AnswerToolbar answerData={answer} t={t} />
+            </Stack>
+
             <Divider />
           </Stack>
         )
@@ -59,10 +122,68 @@ function AnswerToolbar({
   answerData: answersType;
   t: QuestionLanguage;
 }) {
+  const usreId = getCookie("user_id");
+
   const questionVoteCount = answerData.up_vote - answerData.down_vote;
 
   const [voteStatus, setVoteStatus] = useState(answerData.user_vote);
   const [newVote, setNewVote] = useState(0);
+
+  const openModal = () =>
+    modals.openConfirmModal({
+      title: (
+        <Flex
+          gap="xs"
+          justify="flex-start"
+          align="center"
+          direction="row"
+          wrap="nowrap"
+        >
+          <TiWarning size={25} color={theme.other?.warn} />
+          <Title order={3}>{t.warnDeleteAnswer}</Title>
+        </Flex>
+      ),
+      centered: true,
+      children: <Text size="md">{t.warnDeleteAnswerDetil}</Text>,
+      labels: { confirm: t.confirm, cancel: t.cancel },
+      radius: "lg",
+      confirmProps: { color: "red", radius: "lg" },
+      cancelProps: { radius: "lg" },
+      onConfirm: () => DeleteAnswerFunction(),
+    });
+
+  const DeleteAnswerFunction = async () => {
+    const res = await DeleteQuestionAnswer(answerData.id);
+    if (res.status === 204) {
+      notifications.show({
+        radius: "lg",
+        title: t.successfulDeleteAnswer,
+        message: t.successfulDeleteAnswerDetil,
+        icon: <HiCheckCircle size={30} />,
+        color: "green",
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  };
+
+  const DeleteAnswerCompents = () => {
+    if (usreId === answerData.user_id) {
+      return (
+        <Menu.Item
+          component="a"
+          color="red"
+          leftSection={<HiOutlineTrash size={20} />}
+          onClick={openModal}
+        >
+          {t.delete}
+        </Menu.Item>
+      );
+    } else {
+      return <></>;
+    }
+  };
 
   const upVoteFunction = async () => {
     if (voteStatus === 1) {
@@ -76,7 +197,7 @@ function AnswerToolbar({
     } else {
       setNewVote(1);
     }
-    await QuestionAnswerUpVote(answerData.id)
+    await QuestionAnswerUpVote(answerData.id);
   };
 
   const downVoteFunction = async () => {
@@ -91,7 +212,7 @@ function AnswerToolbar({
     } else {
       setNewVote(-1);
     }
-    await QuestionAnswerDownVote(answerData.id)
+    await QuestionAnswerDownVote(answerData.id);
   };
 
   const noVoteFunction = async () => {
@@ -106,7 +227,7 @@ function AnswerToolbar({
     } else {
       setNewVote(0);
     }
-    await DeleteQuestionAnserVote(answerData.id);
+    await DeleteQuestionAnswerVote(answerData.id);
   };
 
   return (
@@ -172,7 +293,7 @@ function AnswerToolbar({
       >
         <MdOutlineLibraryAdd size={30} />
       </ActionIcon>
-      <Menu width={200} shadow="md" radius="lg">
+      <Menu width={110} shadow="md" radius="lg">
         <Menu.Target>
           <ActionIcon
             variant="transparent"
@@ -185,13 +306,15 @@ function AnswerToolbar({
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Menu.Item component="a" href="https://mantine.dev" target="_blank">
-            External link
+          <Menu.Item
+            component="a"
+            href="https://mantine.dev"
+            target="_blank"
+            leftSection={<HiOutlineFlag size={20} />}
+          >
+            Report
           </Menu.Item>
-          <Menu.Divider />
-          <Menu.Item component="a" href="https://mantine.dev" target="_blank">
-            External link
-          </Menu.Item>
+          {DeleteAnswerCompents()}
         </Menu.Dropdown>
       </Menu>
     </Group>

@@ -12,3 +12,10 @@
 .downIcon {
   color: var(--mantine-color-red-9);
 }
+
+.grayIcon {
+  color: light-dark(
+    var(--mantine-color-white-8),
+    var(--mantine-color-white-4)
+  );
+}
