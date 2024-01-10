@@ -11,21 +11,33 @@ import {
   Text,
   Flex,
   Badge,
+  Avatar,
+  Box,
 } from "@mantine/core";
 import { AxiosResponse } from "axios";
 import { TiptapVewContent } from "@/components/editor/editorViewContent";
 import { QuestionLanguage } from "./detill";
 import { ShowAnswer } from "./answerCompents";
 import { Anwser, Comment, QuestionToolbar } from "./questionCompents";
+import classes from "./Detill.module.css";
+import moment from 'moment'
+import { TimeDisplay } from "@/config/config";
 
 export function DetillCompnent({
   questionDetill,
   t,
+  locale
 }: {
   questionDetill: AxiosResponse<any, any>;
   t: QuestionLanguage;
+  locale: string;
 }) {
+  const dt = new Date();
+  let diffTZ = -dt.getTimezoneOffset();
 
+  const askedAtTime = moment(questionDetill.data.create_at).utcOffset(diffTZ).format(TimeDisplay);  
+  const updateAtTime = moment(questionDetill.data.update_at).utcOffset(diffTZ).format(TimeDisplay);  
+  
   function fullBadges() {
     const badges = [];
     for (let i = 0; i < questionDetill.data.tags_name.length; i++) {
@@ -38,7 +50,7 @@ export function DetillCompnent({
     }
     return badges;
   }
-  
+
   return (
     <Grid>
       <Grid.Col span={{ base: 0, md: 4 }}>1</Grid.Col>
@@ -67,21 +79,57 @@ export function DetillCompnent({
               wrap="wrap"
             >
               <Text fw={700} size="xs" c="#868e96">
-                {t.views}: 100k
+                {t.views}: {questionDetill.data.views}
               </Text>
               <Text fw={700} size="xs" c="#868e96">
-                {t.postAt}: 10k
+                {t.askAt}: {askedAtTime}
               </Text>
               <Text fw={700} size="xs" c="#868e96">
-                {t.updateAt}: 10k
+                {t.updateAt}: {updateAtTime}
               </Text>
             </Flex>
             <Divider />
           </Stack>
           <TiptapVewContent content={questionDetill.data.content} />
-          <Group justify="space-between">
-            <QuestionToolbar questionDetill={questionDetill} t={t} />
+
+          <Group wrap="nowrap" justify="space-between" visibleFrom="xs">
+            <QuestionToolbar questionDetill={questionDetill} t={t} locale={locale}/>
+            <Group justify="flex-end">
+              <Avatar
+                variant="filled"
+                radius="sm"
+                src={questionDetill.data.questioner_avatar}
+              />
+              <Stack gap="0px">
+                <Text size="xs" className={classes.grayIcon}>
+                  {t.askAt}: {askedAtTime}
+                </Text>
+                <Text size="md" truncate="end">
+                  {questionDetill.data.questioner_name}
+                </Text>
+              </Stack>
+            </Group>
           </Group>
+
+          <Stack hiddenFrom="xs">
+            <Group justify="flex-start">
+              <Avatar
+                variant="filled"
+                radius="sm"
+                src={questionDetill.data.questioner_avatar}
+              />
+              <Stack gap="0px">
+                <Text size="xs" className={classes.grayIcon}>
+                  {t.askAt}: {askedAtTime}
+                </Text>
+                <Text size="md" truncate="end">
+                  {questionDetill.data?.questioner_name}
+                </Text>
+              </Stack>
+            </Group>
+            <QuestionToolbar questionDetill={questionDetill} t={t} locale={locale}/>
+          </Stack>
+
           <Comment questionDetill={questionDetill} t={t} />
           <Divider />
           <ShowAnswer questionDetill={questionDetill} t={t}></ShowAnswer>

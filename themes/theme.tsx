@@ -32,6 +32,7 @@ export const theme = createTheme({
   other: {
     deepOrangeLight: "#E17900",
     deepOrangeDark: "#FC8C0C",
+    warn: "#FF8C00",
     deepBackground: "#212737",
     lightBackground: "#FFFFFF",
     heroHeight: rem(400),

@@ -10,12 +10,16 @@ import {
   Avatar,
   Flex,
   Button,
+  Space,
+  LoadingOverlay,
+  Box,
+  Title,
 } from "@mantine/core";
 import { AxiosResponse } from "axios";
 import "@mantine/tiptap/styles.css";
 import { TbArrowBigDown, TbArrowBigUp } from "react-icons/tb";
 import classes from "./Detill.module.css";
-import { HiOutlineAnnotation, HiDotsHorizontal } from "react-icons/hi";
+import { HiOutlineAnnotation, HiDotsHorizontal, HiCheckCircle } from "react-icons/hi";
 import { FaRegShareSquare } from "react-icons/fa";
 import { MdOutlineLibraryAdd } from "react-icons/md";
 import { QuestionUpvote } from "@/api/question/questionUpVote";
@@ -29,6 +33,14 @@ import { NewQuestionComment } from "@/api/question/comment/newComment";
 import { BsFillSendFill } from "react-icons/bs";
 import { SimpleViewContent } from "@/components/editor/simpleViewContent";
 import { NewQuestionAnswer } from "@/api/question/answer/newQuestionAnswer";
+import { HiOutlineTrash, HiOutlineFlag } from "react-icons/hi";
+import { getCookie } from 'cookies-next';
+import { modals } from "@mantine/modals";
+import { TiWarning } from "react-icons/ti";
+import { theme } from "@/themes/theme";
+import { notifications } from "@mantine/notifications";
+import { DeleteQuesiton } from "@/api/question/deleteQuestion";
+import { useRouter } from "next/navigation";
 
 export function Anwser({
   questionDetill,
@@ -38,15 +50,36 @@ export function Anwser({
   t: QuestionLanguage;
 }) {
   const [editorContent, setEditorContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const newAnswerFunction = async () => {
+    setLoading(true);
     const res = await NewQuestionAnswer(questionDetill.data.id, editorContent);
+    setLoading(false);
   };
 
   return (
     <Stack gap="xs">
-      <TiptapEditor changeContent={setEditorContent} />
+      <Text
+        size="50px"
+        fw={900}
+        variant="gradient"
+        gradient={{ from: "orange", to: "rgba(221, 255, 0, 1)", deg: 90 }}
+        className={classes.graytext}
+      >
+        {t.answerThisQuestion}
+      </Text>
+      <Space h={"md"} />
+      <Box pos="relative">
+        <LoadingOverlay
+          visible={loading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
+        />
+        <TiptapEditor changeContent={setEditorContent} />
+      </Box>
       <Button
+        loading={loading}
         variant="filled"
         rightSection={<BsFillSendFill />}
         onClick={newAnswerFunction}
@@ -87,7 +120,7 @@ export function Comment({
             onClick={newCommentFunction}
             rightSection={<BsFillSendFill />}
           >
-            comment
+            {t.comment}
           </Button>
         </Stack>
       </Grid.Col>
@@ -124,7 +157,7 @@ export function SubComment({ t }: { t: QuestionLanguage }) {
           </Text>
         </Flex>
         <SimpleViewContent
-          content={`<p>fuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchfuck you bitchv</p><p>fuck you bitch</p><pre><code class="language-js">console.log("you are bitch")</code></pre>`}
+          content={`<p>fuck you</p>`}
         />
       </Stack>
     </Flex>
@@ -134,12 +167,73 @@ export function SubComment({ t }: { t: QuestionLanguage }) {
 export function QuestionToolbar({
   questionDetill,
   t,
+  locale,
 }: {
   questionDetill: AxiosResponse<any, any>;
   t: QuestionLanguage;
+  locale: string;
 }) {
+  const router = useRouter()
+  const usreId = getCookie("user_id");
+
   const [voteStatus, setVoteStatus] = useState(questionDetill.data.user_vote);
   const [newVote, setNewVote] = useState(0);
+
+  const openModal = () =>
+  modals.openConfirmModal({
+    title: (
+      <Flex
+        gap="xs"
+        justify="flex-start"
+        align="center"
+        direction="row"
+        wrap="nowrap"
+      >
+        <TiWarning size={25} color={theme.other?.warn} />
+        <Title order={3}>{t.warnDeleteQuestion}</Title>
+      </Flex>
+    ),
+    centered: true,
+    children: <Text size="md">{t.warnDeleteQuestionDetil}</Text>,
+    labels: { confirm: t.confirm, cancel: t.cancel },
+    radius: "lg",
+    confirmProps: { color: "red", radius: "lg" },
+    cancelProps: { radius: "lg" },
+    onConfirm: () => DeleteQuestionFunction(),
+  });
+
+const DeleteQuestionFunction = async () => {
+  const res = await DeleteQuesiton(questionDetill.data.id);
+  if (res.status === 204) {
+    notifications.show({
+      radius: "lg",
+      title: t.successfulDeleteQuestion,
+      message: t.successfulDeleteQuestionDetil,
+      icon: <HiCheckCircle size={30} />,
+      color: "green",
+    });
+    setTimeout(() => {
+      router.push(`/${locale}/question`)
+    }, 1000);
+  }
+};
+
+  const DeleteQuestionCompents = () => {
+    if (usreId === questionDetill.data.questioner_id) {
+      return (
+        <Menu.Item
+          component="a"
+          color="red"
+          leftSection={<HiOutlineTrash size={20} />}
+          onClick={openModal}
+        >
+          {t.delete}
+        </Menu.Item>
+      );
+    } else {
+      return <></>;
+    }
+  }
 
   const upVoteFunction = async () => {
     if (voteStatus === 1) {
@@ -249,7 +343,7 @@ export function QuestionToolbar({
       >
         <MdOutlineLibraryAdd size={30} />
       </ActionIcon>
-      <Menu width={200} shadow="md" radius="lg">
+      <Menu width={110} shadow="md" radius="lg">
         <Menu.Target>
           <ActionIcon
             variant="transparent"
@@ -262,13 +356,15 @@ export function QuestionToolbar({
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Menu.Item component="a" href="https://mantine.dev" target="_blank">
-            External link
+        <Menu.Item
+            component="a"
+            href="https://mantine.dev"
+            target="_blank"
+            leftSection={<HiOutlineFlag size={20} />}
+          >
+            Report
           </Menu.Item>
-          <Menu.Divider />
-          <Menu.Item component="a" href="https://mantine.dev" target="_blank">
-            External link
-          </Menu.Item>
+          {DeleteQuestionCompents()}
         </Menu.Dropdown>
       </Menu>
     </Group>

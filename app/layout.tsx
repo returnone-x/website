@@ -1,5 +1,6 @@
 "use client";
 import "@mantine/core/styles.css";
+import '@mantine/notifications/styles.css';
 import {
   MantineProvider,
   ColorSchemeScript,
@@ -8,6 +9,7 @@ import {
 import { Notifications } from "@mantine/notifications";
 import "./globals.css";
 import { theme, resolver } from "@/themes/theme";
+import { ModalsProvider } from "@mantine/modals";
 
 export default function RootLayout({
   children,
@@ -25,8 +27,10 @@ export default function RootLayout({
           cssVariablesResolver={resolver}
           defaultColorScheme="dark"
         >
-          {children}
-          <Notifications />
+          <ModalsProvider>
+            {children}
+            <Notifications />
+          </ModalsProvider>
         </MantineProvider>
       </body>
     </html>
