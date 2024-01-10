@@ -74,10 +74,10 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "successfulDeleteAnswer": "Successful Delete Answer",
-    "successfulDeleteAnswerDetil": "You have successful delete this your answer!",
+    "successfulDeleteAnswerDetil": "You have successful delete this answer!",
     "warnDeleteQuestion": "Are you sure delete this question?",
     "warnDeleteQuestionDetil": "If you delete this question, it cannot be recovered!",
     "successfulDeleteQuestion": "Successful Delete Question",
-    "successfulDeleteQuestionDetil": "You have successful delete this your question!"
+    "successfulDeleteQuestionDetil": "You have successful delete this question!"
   }
 }
