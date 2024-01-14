@@ -6,8 +6,6 @@ import { HiOutlineLogout, HiOutlineUserCircle } from "react-icons/hi";
 import { getLogout } from "@/api/Auth/logout";
 import { useEffect } from "react";
 import { refreshToken } from "@/api/Auth/refreshToken";
-import Cookies from "js-cookie";
-import { deleteCookie } from 'cookies-next';
 // whole components
 export function UserAvatarDropdown({
   t,
@@ -20,22 +18,14 @@ export function UserAvatarDropdown({
     const refreshTokenFunction = async () => {
       const res = await refreshToken();
       if (res.status != 200) {
-        Cookies.remove("refreshToken")
-        Cookies.remove("accessToken")
         window.location.reload();
       }
     };
     setInterval(() => {refreshTokenFunction()}, 20 * 60 * 1000);
   }, []);
   const logout = async () => {
-    const res = await getLogout();
-    if (res.status == 200) {
-      window.location.reload();
-    }else{
-      deleteCookie("refreshToken")
-      deleteCookie("accessToken")
-      window.location.reload();
-    }
+    await getLogout();
+    window.location.reload();
   };
   return (
     <Menu radius="lg" width={200}>

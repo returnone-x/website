@@ -1,5 +1,6 @@
 "use client";
 
+import { Card, Title, Transition } from "@mantine/core";
 import {
   Text,
   Button,
@@ -13,46 +14,106 @@ import {
   PasswordInput,
   Anchor,
 } from "@mantine/core";
-import classes from "./Header.module.css";
+import classes from "./Auth.module.css";
+import { useForm } from "@mantine/form";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { notifications } from "@mantine/notifications";
+import { HiEmojiSad, HiBadgeCheck, HiFingerPrint, HiCheckCircle } from "react-icons/hi";
+import { API_URL, websiteUrl } from "@/config/config";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   useDebouncedState,
   useDebouncedValue,
   useDisclosure,
 } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { passwordStrength } from "check-password-strength";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { checkUsername } from "@/api/Auth/checkUsername";
 import { postSignUp } from "@/api/Auth/signup";
-import { notifications } from "@mantine/notifications";
-import { HiEmojiSad, HiBadgeCheck, HiFingerPrint } from "react-icons/hi";
-import { API_URL } from "@/config/config";
 import { IsValidUsername } from "@/utils/valid";
 import { rename } from "@/api/user/rename";
 import { hasCookie } from "cookies-next";
-import { checkAuthorizationa } from "@/api/Auth/checkAuthorizationa";
-import { HeaderLanguage } from "./Header";
-import { GetAvatar } from "@/api/user/getAvatar";
+import { AuthLanguage } from "./login";
 
-export function SignupComponents({
+export function SignupComponent({ t }: { t: AuthLanguage }) {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("r");
+  const [renameOpen, setRenameOpen] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setSignupOpen(true);
+    }, 1);
+  }, []);
+  return (
+    <div className={classes.fullScreen}>
+      <Center maw={"100%"} h={"100%"}>
+        <Transition
+          mounted={signupOpen}
+          transition="scale-x"
+          duration={400}
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <div style={styles}>
+              <Card shadow="sm" radius="lg" padding="md" w={"500px"}>
+                <Center w={"100%"}>
+                  <Title order={2}>{t.signUpForReturnone}</Title>
+                </Center>
+                <Space h="xl" />
+                <SignupComponentsModal
+                  t={t}
+                  redirectUrl={
+                    redirect ? decodeURIComponent(redirect) : websiteUrl
+                  }
+                  setSignupOpen={setSignupOpen}
+                  setRenameOpen={setRenameOpen}
+                />
+              </Card>
+            </div>
+          )}
+        </Transition>
+        <Transition
+          mounted={renameOpen}
+          transition="scale-x"
+          duration={400}
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <div style={styles}>
+              <Card shadow="sm" radius="lg" padding="md" w={"500px"}>
+                <Center w={"100%"}>
+                  <Title order={2}>{t.pleaseUpdateYourName}</Title>
+                </Center>
+                <Space h="xl" />
+                <RenameModal
+                  t={t}
+                  redirectUrl={
+                    redirect ? decodeURIComponent(redirect) : websiteUrl
+                  }
+                />
+              </Card>
+            </div>
+          )}
+        </Transition>
+      </Center>
+    </div>
+  );
+}
+
+export function SignupComponentsModal({
   t,
-  signupOppened,
-  signupOpen,
-  signupClose,
-  loginOpen,
-  setAvatar,
-  fullWidth,
+  redirectUrl,
+  setSignupOpen,
+  setRenameOpen,
 }: {
-  t: HeaderLanguage;
-  signupOppened: boolean;
-  signupOpen: () => void;
-  signupClose: () => void;
-  loginOpen: () => void;
-  setAvatar: Dispatch<SetStateAction<string>>;
-  fullWidth: boolean;
+  t: AuthLanguage;
+  redirectUrl: string;
+  setSignupOpen: Dispatch<SetStateAction<boolean>>;
+  setRenameOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
   const [
     RenameModalStatus,
     { toggle: RenameModalOpen, close: RenameModalClose },
@@ -125,23 +186,16 @@ export function SignupComponents({
       signupform.values.email
     );
     if (res.status == 200) {
-      signupClose();
-      const fetchGetAvatar = async () => {
-        const res = await GetAvatar();
-        if (res.status == 200) {
-          setAvatar(res.data.data);
-        }
-      };
-      fetchGetAvatar();
       notifications.show({
         color: "green",
         title: t.successfulOauthSignup,
         message: t.successfulOauthsignupMessage,
-        icon: <HiBadgeCheck size={25} />,
+        icon: <HiCheckCircle size={30} />,
         classNames: classes,
         autoClose: 5000,
       });
       signupform.reset();
+      window.location.href = redirectUrl;
     }
     if (res.data.message == "This email address is already in use") {
       signupform.setErrors({ email: t.emailHasBeenUse });
@@ -150,7 +204,6 @@ export function SignupComponents({
       signupform.setErrors({ email: t.usernameHasBeenUse });
     }
     if (res.status == 500) {
-      signupClose();
       notifications.show({
         color: "red",
         title: t.anUnexpectedErrorOccurred,
@@ -163,112 +216,92 @@ export function SignupComponents({
     setLoading(false);
   };
 
-  const changeToLoginModal = () => {
-    signupClose();
-    loginOpen();
-  };
   return (
     <>
-      <Button variant="filled" radius="md" onClick={signupOpen} fullWidth={fullWidth}>
-        {t.signUp}
-      </Button>
-
-      <Modal
-        opened={signupOppened}
-        onClose={signupClose}
-        radius="md"
-        title={
-          <Center w="100%">
-            <Text fw={700} size="xl">
-              {t.signUpForReturnone}
-            </Text>
-          </Center>
-        }
+      <form
+        onSubmit={signupform.onSubmit(() => {
+          signUp();
+        })}
       >
-        <form
-          onSubmit={signupform.onSubmit(() => {
-            signUp();
-          })}
-        >
-          <Stack className={classes.modelPadding}>
-            <TextInput
-              label={<Text fw={700}>{t.username}</Text>}
-              size="md"
-              type="username"
-              placeholder={t.typeUsername}
-              radius="md"
-              disabled={loading}
-              {...signupform.getInputProps("username")}
+        <Stack className={classes.modelPadding}>
+          <TextInput
+            label={<Text fw={700}>{t.username}</Text>}
+            size="md"
+            type="username"
+            placeholder={t.typeUsername}
+            radius="md"
+            disabled={loading}
+            {...signupform.getInputProps("username")}
+          />
+          <TextInput
+            label={<Text fw={700}>{t.email}</Text>}
+            size="md"
+            type="email"
+            placeholder={t.typeEmail}
+            radius="md"
+            disabled={loading}
+            {...signupform.getInputProps("email")}
+          />
+          <PasswordInput
+            label={<Text fw={700}>{t.password}</Text>}
+            size="md"
+            placeholder={t.typePassword}
+            radius="md"
+            disabled={loading}
+            {...signupform.getInputProps("password")}
+          />
+          <PasswordInput
+            label={<Text fw={700}>{t.confirmPassword}</Text>}
+            size="md"
+            placeholder={t.typePassword}
+            radius="md"
+            disabled={loading}
+            {...signupform.getInputProps("confirmPassword")}
+          />
+          <Divider my="xs" labelPosition="center" label={t.orSignupWith} />
+          <Group grow justify="space-between">
+            <Google
+              t={t}
+              signupLoading={loading}
+              redirectUrl={redirectUrl}
+              setSignupOpen={setSignupOpen}
+              setRenameOpen={setRenameOpen}
             />
-            <TextInput
-              label={<Text fw={700}>{t.email}</Text>}
-              size="md"
-              type="email"
-              placeholder={t.typeEmail}
-              radius="md"
-              disabled={loading}
-              {...signupform.getInputProps("email")}
+            <Github
+              t={t}
+              signupLoading={loading}
+              redirectUrl={redirectUrl}
+              setRenameOpen={setRenameOpen}
+              setSignupOpen={setSignupOpen}
             />
-            <PasswordInput
-              label={<Text fw={700}>{t.password}</Text>}
-              size="md"
-              placeholder={t.typePassword}
-              radius="md"
-              disabled={loading}
-              {...signupform.getInputProps("password")}
-            />
-            <PasswordInput
-              label={<Text fw={700}>{t.confirmPassword}</Text>}
-              size="md"
-              placeholder={t.typePassword}
-              radius="md"
-              disabled={loading}
-              {...signupform.getInputProps("confirmPassword")}
-            />
-            <Divider my="xs" labelPosition="center" label={t.orSignupWith} />
-            <Group grow justify="space-between">
-              <Google
-                t={t}
-                signupLoading={loading}
-                signupClose={signupClose}
-                RenameModalOpen={RenameModalOpen}
-                setAvatar={setAvatar}
-              />
-              <Github
-                t={t}
-                signupLoading={loading}
-                signupClose={signupClose}
-                RenameModalOpen={RenameModalOpen}
-                setAvatar={setAvatar}
-              />
-            </Group>
-            <Space h="xs" />
-            <Text size="xs">{t.iAgreeTerms}</Text>
-            <Group justify="space-between">
-              <Text size="sm">
-                {t.alreadyHaveAccount + " "}
-                <Anchor onClick={() => changeToLoginModal()}>{t.logIn}</Anchor>
-              </Text>
-              <Button
-                variant="filled"
-                radius="md"
-                size="sm"
-                className={classes.outlinebutton}
-                type="submit"
-                loading={loading}
+          </Group>
+          <Space h="xs" />
+          <Text size="xs">{t.iAgreeTerms}</Text>
+          <Group justify="space-between">
+            <Text size="sm">
+              {t.alreadyHaveAccount + " "}
+              <Anchor
+                onClick={() => {
+                  setSignupOpen(false);
+                router.push(websiteUrl + "/login?r=" + redirectUrl);
+                }}
               >
-                {t.signUp}
-              </Button>
-            </Group>
-          </Stack>
-        </form>
-      </Modal>
-      <RenameModal
-        t={t}
-        RenameModalStatus={RenameModalStatus}
-        RenameModalClose={RenameModalClose}
-        setAvatar={setAvatar}
-      ></RenameModal>
+                {t.logIn}
+              </Anchor>
+            </Text>
+            <Button
+              variant="filled"
+              radius="md"
+              size="sm"
+              className={classes.outlinebutton}
+              type="submit"
+              loading={loading}
+            >
+              {t.signUp}
+            </Button>
+          </Group>
+        </Stack>
+      </form>
     </>
   );
 }
@@ -276,16 +309,17 @@ export function SignupComponents({
 export function Google({
   t,
   signupLoading,
-  signupClose,
-  RenameModalOpen,
-  setAvatar,
+  redirectUrl,
+  setSignupOpen,
+  setRenameOpen,
 }: {
-  t: HeaderLanguage;
+  t: AuthLanguage;
   signupLoading: boolean;
-  signupClose: () => void;
-  RenameModalOpen: () => void;
-  setAvatar: Dispatch<SetStateAction<string>>;
+  redirectUrl: string;
+  setSignupOpen: Dispatch<SetStateAction<boolean>>;
+  setRenameOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   // open a popup windows
   const handleOpenWindow = () => {
@@ -309,17 +343,12 @@ export function Google({
           clearInterval(checkPopup);
           setLoading(false);
           if (hasCookie("first_login")) {
-            signupClose();
-            RenameModalOpen();
+            setSignupOpen(false);
+            setTimeout(() => {
+              setRenameOpen(true);
+            }, 400);
           } else {
-            const fetchGetAvatar = async () => {
-              const res = await GetAvatar();
-              if (res.status == 200) {
-                signupClose();
-                setAvatar(res.data.data);
-              }
-            };
-            fetchGetAvatar();
+            window.location.href = redirectUrl;
           }
         }
       }, 100);
@@ -348,16 +377,17 @@ export function Google({
 export function Github({
   t,
   signupLoading,
-  signupClose,
-  RenameModalOpen,
-  setAvatar,
+  redirectUrl,
+  setSignupOpen,
+  setRenameOpen,
 }: {
-  t: HeaderLanguage;
+  t: AuthLanguage;
   signupLoading: boolean;
-  signupClose: () => void;
-  RenameModalOpen: () => void;
-  setAvatar: Dispatch<SetStateAction<string>>;
+  redirectUrl: string;
+  setSignupOpen: Dispatch<SetStateAction<boolean>>;
+  setRenameOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   // open a popup windows
   const handleOpenWindow = () => {
@@ -381,17 +411,12 @@ export function Github({
           clearInterval(checkPopup);
           setLoading(false);
           if (hasCookie("first_login")) {
-            signupClose();
-            RenameModalOpen();
+            setSignupOpen(false);
+            setTimeout(() => {
+              setRenameOpen(true);
+            }, 400);
           } else {
-            const fetchGetAvatar = async () => {
-              const res = await GetAvatar();
-              if (res.status == 200) {
-                signupClose();
-                setAvatar(res.data.data);
-              }
-            };
-            fetchGetAvatar();
+            window.location.href = redirectUrl;
           }
         }
       }, 100);
@@ -419,15 +444,12 @@ export function Github({
 
 function RenameModal({
   t,
-  RenameModalStatus,
-  RenameModalClose,
-  setAvatar,
+  redirectUrl,
 }: {
-  t: HeaderLanguage;
-  RenameModalStatus: boolean;
-  RenameModalClose: () => void;
-  setAvatar: Dispatch<SetStateAction<string>>;
+  t: AuthLanguage;
+  redirectUrl: string;
 }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [usernameError, setUsernameError] = useState("");
   // when username has not edit in 200ms than change the username
@@ -464,27 +486,17 @@ function RenameModal({
       setLoading(false);
       return;
     } else {
-      console.log(usernameError);
-      console.log(usernameError != "");
-      console.log(username.length);
       const res = await rename(username);
       if (res.status == 200) {
-        RenameModalClose();
-        const fetchGetAvatar = async () => {
-          const res = await GetAvatar();
-          if (res.status == 200) {
-            setAvatar(res.data.data);
-          }
-        };
-        fetchGetAvatar();
         notifications.show({
           color: "green",
           title: t.successfulOauthSignup,
           message: t.successfulOauthsignupMessage,
-          icon: <HiBadgeCheck size={25} />,
+          icon: <HiCheckCircle size={30} />,
           classNames: classes,
           autoClose: 5000,
         });
+        window.location.href = redirectUrl;
       } else {
         setUsernameError(t.invalidUsername);
       }
@@ -494,45 +506,32 @@ function RenameModal({
 
   return (
     <>
-      <Modal
-        opened={RenameModalStatus}
-        onClose={RenameModalClose}
-        radius="md"
-        title={
-          <Center w="100%">
-            <Text fw={700} size="xl">
-              {t.pleaseUpdateYourName}
-            </Text>
-          </Center>
-        }
-      >
-        <Stack className={classes.modelPadding}>
-          <TextInput
-            label={<Text fw={700}>{t.username}</Text>}
-            size="md"
-            type="username"
-            placeholder={t.typeUsername}
-            radius="md"
-            error={usernameError}
-            disabled={loading}
-            onChange={(event) => setUsername(event.currentTarget.value)}
-          />
-          <Divider my="xs" labelPosition="center" />
-          <Button
-            variant="filled"
-            radius="md"
-            size="sm"
-            leftSection={<HiFingerPrint />}
-            className={classes.outlinebutton}
-            type="submit"
-            loading={loading}
-            fullWidth
-            onClick={renameFunction}
-          >
-            {t.rename}
-          </Button>
-        </Stack>
-      </Modal>
+      <Stack className={classes.modelPadding}>
+        <TextInput
+          label={<Text fw={700}>{t.username}</Text>}
+          size="md"
+          type="username"
+          placeholder={t.typeUsername}
+          radius="md"
+          error={usernameError}
+          disabled={loading}
+          onChange={(event) => setUsername(event.currentTarget.value)}
+        />
+        <Divider my="xs" labelPosition="center" />
+        <Button
+          variant="filled"
+          radius="md"
+          size="sm"
+          leftSection={<HiFingerPrint />}
+          className={classes.outlinebutton}
+          type="submit"
+          loading={loading}
+          fullWidth
+          onClick={renameFunction}
+        >
+          {t.rename}
+        </Button>
+      </Stack>
     </>
   );
 }
