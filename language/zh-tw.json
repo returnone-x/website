@@ -59,11 +59,25 @@
   },
   "GetQuestion": {
     "views": "瀏覽數",
-    "postAt": "發布於",
+    "askAt": "提問於",
     "updateAt": "更新於",
     "edited": "已編輯",
     "loadMore": "載入更多",
     "vote": "投票",
-    "voted": "已投票"
+    "voted": "已投票",
+    "answer": "立即回答!",
+    "comment": "評論",
+    "answerThisQuestion": "立即回答這個問題!",
+    "warnDeleteAnswer": "你是否確定要刪除這個答案?",
+    "warnDeleteAnswerDetil": "如果你刪除了這個回答，你將無法將它復原！",
+    "confirm": "確認",
+    "cancel": "取消",
+    "delete": "刪除",
+    "successfulDeleteAnswer": "成功刪除回答",
+    "successfulDeleteAnswerDetil": "你成功刪除這個回答！",
+    "warnDeleteQuestion": "你是否確定刪除這個問題？",
+    "warnDeleteQuestionDetil": "如果你刪除了這個問題，你將無法將它復原！",
+    "successfulDeleteQuestion": "成功刪除問題",
+    "successfulDeleteQuestionDetil": "你成功刪除這個提問!"
   }
 }
