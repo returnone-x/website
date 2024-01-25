@@ -19,6 +19,7 @@ export default function LocaleLayout({
     ask: t("ask"),
     logout: t("logout"),
     profile: t("profile"),
+    setting: t("setting")
   };
   return (
     <>

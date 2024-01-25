@@ -2,7 +2,9 @@
 
 import { HeaderLanguage } from "./Header";
 import { ActionIcon, Avatar, Menu } from "@mantine/core";
-import { HiOutlineLogout, HiOutlineUserCircle } from "react-icons/hi";
+import { MdLogout } from "react-icons/md";
+import { RiSettings5Line } from "react-icons/ri";
+import { AiOutlineUser } from "react-icons/ai";
 import { getLogout } from "@/api/Auth/logout";
 import { useEffect } from "react";
 import { refreshToken } from "@/api/Auth/refreshToken";
@@ -21,7 +23,9 @@ export function UserAvatarDropdown({
         window.location.reload();
       }
     };
-    setInterval(() => {refreshTokenFunction()}, 20 * 60 * 1000);
+    setInterval(() => {
+      refreshTokenFunction();
+    }, 20 * 60 * 1000);
   }, []);
   const logout = async () => {
     await getLogout();
@@ -35,13 +39,16 @@ export function UserAvatarDropdown({
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Item leftSection={<HiOutlineUserCircle size={20} />}>
+        <Menu.Item leftSection={<AiOutlineUser size={20} />}>
           {t.profile}
+        </Menu.Item>
+        <Menu.Item leftSection={<RiSettings5Line size={20} />}>
+          {t.setting}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item
           color="red"
-          leftSection={<HiOutlineLogout size={20} />}
+          leftSection={<MdLogout size={20} />}
           onClick={() => logout()}
         >
           {t.logout}

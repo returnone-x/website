@@ -1,10 +1,13 @@
 import { HeaderComponent } from "@/components/header/Header";
+import { Space } from "@mantine/core";
 import { useTranslations } from "next-intl";
+import { cookies } from "next/headers";
+import React from "react";
 
-export default function Home({
-  params: { locale },
+export default function LocaleLayout({
+  children,
 }: {
-  params: { locale: "en" | "zh-tw" };
+  children: React.ReactNode;
 }) {
   const t = useTranslations("Header");
   const signipLoginTranslate = {
@@ -16,12 +19,15 @@ export default function Home({
     ask: t("ask"),
     logout: t("logout"),
     profile: t("profile"),
-    setting: t("setting"),
+    setting: t("setting")
   };
   return (
-  <>
-  <HeaderComponent t={signipLoginTranslate}/> 
-  test
-  </>
+    <>
+      <HeaderComponent t={signipLoginTranslate} />
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
+      {children}
+    </>
   );
 }

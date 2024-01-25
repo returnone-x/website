@@ -16,3 +16,5 @@ export type AppPathnames = keyof typeof pathnames;
 
 export const TimeDisplay = "YYYY/MM/DD  h:mm A"
 
+export const SimpleTimeDisplay = "YYYY/MM/DD"
+
