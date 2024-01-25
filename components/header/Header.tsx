@@ -29,6 +29,7 @@ export type HeaderLanguage = {
   ask: string;
   logout: string;
   profile: string;
+  setting: string;
 };
 
 export async function HeaderComponent({
