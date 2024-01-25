@@ -8,7 +8,7 @@
     "ask": "提問",
     "logout": "登出",
     "profile": "個人資料",
-    "setting": "Setting"
+    "setting": "設定"
   },
   "Auth": {
     "signUpForReturnone": "立即註冊 Returnone",
@@ -86,18 +86,18 @@
     "successfulDeleteQuestionDetil": "你成功刪除這個提問!"
   },
   "QuestionList": {
-    "views": "views",
-    "askAt": "asked at",
-    "votes": "votes",
-    "online": "online",
-    "answers": "answers",
-    "home": "Home",
-    "hotQuestion": "Hot Question",
-    "tags": "tags",
-    "saved": "saved",
-    "yourQuestions": "Your Questions",
-    "yourAnswer": "Your Answer",
-    "history": "History",
-    "recommend": "Recommend"
+    "views": "瀏覽數",
+    "askAt": "提問於",
+    "votes": "票數",
+    "online": "線上",
+    "answers": "回答",
+    "home": "首頁",
+    "hotQuestion": "熱門問題",
+    "tags": "標籤",
+    "saved": "已保存",
+    "yourQuestions": "您的問題",
+    "yourAnswer": "您的答案",
+    "history": "歷史紀錄",
+    "recommend": "推薦"
   }
 }
