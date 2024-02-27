@@ -5,7 +5,7 @@ export async function GetQuestions(Query: string) {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: API_URL + "/public/questions" + Query,
+    url: API_URL + "/public/question" + Query,
   };
   return await axios.request(config);
 }

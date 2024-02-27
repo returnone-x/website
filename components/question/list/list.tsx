@@ -37,14 +37,19 @@ export type Questions = {
 export async function Question({
   t,
   query,
+  page,
+  tag,
 }: {
   t: ListLanguage;
   query: string;
+  page: number;
+  tag: string;
 }) {
   const questionData = await getQuestions(query);
-  const questionsArray: Questions[] = questionData as Questions[];
-  
-  return <QuestionListComponents t={t} questionsArray={questionsArray}/>;
+  const questionsArray: Questions[] = questionData.data as Questions[];
+  const questionsNumber: number = questionData.questions_number as number;
+
+  return <QuestionListComponents t={t} questionsArray={questionsArray} questionsNumber={questionsNumber} page={page} tag={tag}/>;
 }
 
 async function getQuestions(query: string) {
@@ -55,5 +60,5 @@ async function getQuestions(query: string) {
     return [];
   }
 
-  return res.data.data ;
+  return res.data ;
 }

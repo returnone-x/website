@@ -22,6 +22,7 @@ import { Anwser, Comment, QuestionToolbar } from "./questionCompents";
 import classes from "./Detill.module.css";
 import moment from 'moment'
 import { TimeDisplay } from "@/config/config";
+import { ChatBox } from "./chatBox";
 
 export function DetillCompnent({
   questionDetill,
@@ -53,8 +54,10 @@ export function DetillCompnent({
 
   return (
     <Grid>
-      <Grid.Col span={{ base: 0, md: 4 }}>1</Grid.Col>
-      <Grid.Col span={{ base: 12, md: 8 }}>
+      <Grid.Col span={{ base: 0, md: 5 }}>
+        <ChatBox></ChatBox>
+      </Grid.Col>
+      <Grid.Col span={{ base: 12, md: 7 }}>
         <Stack>
           <Stack gap="xs">
             <Title order={1}>{questionDetill.data.title}</Title>
@@ -130,7 +133,7 @@ export function DetillCompnent({
             <QuestionToolbar questionDetill={questionDetill} t={t} locale={locale}/>
           </Stack>
 
-          <Comment questionDetill={questionDetill} t={t} />
+          {/* <Comment questionDetill={questionDetill} t={t} /> */}
           <Divider />
           <ShowAnswer questionDetill={questionDetill} t={t}></ShowAnswer>
           <Space />

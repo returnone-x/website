@@ -9,6 +9,7 @@ import {
   Divider,
   Grid,
   Group,
+  LoadingOverlay,
   Space,
   Stack,
   Text,
@@ -27,17 +28,43 @@ import moment from "moment";
 import { SimpleTimeDisplay, TimeDisplay, websiteUrl } from "@/config/config";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
+import { useEffect, useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
 
 export function QuestionListComponents({
   t,
   questionsArray,
+  questionsNumber,
+  page,
+  tag,
 }: {
   t: ListLanguage;
   questionsArray: Questions[];
+  questionsNumber: number;
+  page: number;
+  tag: string;
 }) {
+  const router = useRouter();
+  const [activePage, setPage] = useState(page == 0 ? 1 : page);
   const dt = new Date();
   let diffTZ = -dt.getTimezoneOffset();
   const locale = getCookie("NEXT_LOCALE") || "en";
+
+  let query = "";
+  if (page != undefined && tag != "") {
+    query = `?page=${activePage}&tag=${tag}`;
+  } else if (page != undefined) {
+    query = `?page=${activePage}`;
+  } else if (tag != undefined) {
+    query = `?tag=${tag}`;
+  }
+
+  useEffect(() => {
+    if (activePage != page) {
+      router.push(`/${locale}/questions${query}`)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePage]);
 
   return (
     <>
@@ -58,13 +85,22 @@ export function QuestionListComponents({
             ))}
             <Space h="md" />
             <Center>
-              <Pagination
-                total={20}
-                siblings={2}
-                radius="md"
-                visibleFrom="md"
-              />
-              <Pagination total={20} siblings={1} radius="md" hiddenFrom="md" />
+                <Pagination
+                  total={Math.ceil(questionsNumber / 15)}
+                  siblings={2}
+                  radius="md"
+                  visibleFrom="md"
+                  onChange={setPage}
+                  defaultValue={page}
+                />
+                <Pagination
+                  onChange={setPage}
+                  defaultValue={page}
+                  total={Math.ceil(questionsNumber / 15)}
+                  siblings={1}
+                  radius="md"
+                  hiddenFrom="md"
+                />
             </Center>
           </Stack>
         </Grid.Col>
@@ -87,23 +123,28 @@ export function QuestionListCard({
   diffTZ: number;
   locale: string;
 }) {
-  const router = useRouter()
+  const router = useRouter();
   const now = moment();
   const askedAtMoment = moment(question.create_at).utcOffset(diffTZ);
 
-  const timeDifferenceInDays = now.diff(askedAtMoment, 'days');
+  const timeDifferenceInDays = now.diff(askedAtMoment, "days");
 
-  const askedAtTime = timeDifferenceInDays < 1
-    ? askedAtMoment.fromNow()
-    : askedAtMoment.format(SimpleTimeDisplay);
-  const vote = question.vote_up - question.vote_down
+  const askedAtTime =
+    timeDifferenceInDays < 1
+      ? askedAtMoment.fromNow()
+      : askedAtMoment.format(SimpleTimeDisplay);
+  const vote = question.vote_up - question.vote_down;
   return (
     <Card shadow="sm" padding="xs" radius="md" withBorder>
       <Grid>
         <Grid.Col span={{ base: 0, md: 2 }}>
           <Stack align="flex-end" gap="5px" justify="flex-end">
-            <Text size="sm">{vote <= 0 ? "": vote} {t.votes}</Text>
-            <Text size="sm">{question.answers} {t.answers}</Text>
+            <Text size="sm">
+              {vote <= 0 ? "" : vote} {t.votes}
+            </Text>
+            <Text size="sm">
+              {question.answers} {t.answers}
+            </Text>
             <Text size="sm">
               {question.views} {t.views}
             </Text>
@@ -114,7 +155,11 @@ export function QuestionListCard({
           <Stack gap="0px">
             <Group gap="sm" wrap="nowrap">
               <FaCheck color="#69db7c" size={20} />
-              <Anchor underline="hover" href={websiteUrl + `${locale}/questions/${question.id}`} c="#fd7e14">
+              <Anchor
+                underline="hover"
+                href={websiteUrl + `/${locale}/questions/${question.id}`}
+                c="#fd7e14"
+              >
                 <Text size="lg">{question.title}</Text>
               </Anchor>
             </Group>

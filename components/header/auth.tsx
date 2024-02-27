@@ -7,6 +7,7 @@ import { Avatar, Button, Grid, Group } from "@mantine/core";
 import { UserAvatarDropdown } from "./avatar";
 import classes from "./Header.module.css";
 import { websiteUrl } from "@/config/config";
+import { getCookie } from "cookies-next";
 // whole components
 export function SignupLogin({
   t,
@@ -15,6 +16,7 @@ export function SignupLogin({
   t: HeaderLanguage;
   visibleFrom: string;
 }) {
+  const locale = getCookie("NEXT_LOCALE") || "en";
   const [fullURL, setFullURL] = useState(websiteUrl)
   const [avatar, setAvatar] = useState("");
 
@@ -34,7 +36,7 @@ export function SignupLogin({
           <Grid.Col span={{ base: 12, xs: 6 }}>
             <Button
               component="a"
-              href={websiteUrl + `/login?r=${fullURL}`}
+              href={websiteUrl + `/${locale}/login?r=${fullURL}`}
               variant="outline"
               radius="md"
               className={classes.outlinebutton}
@@ -46,7 +48,7 @@ export function SignupLogin({
           <Grid.Col span={{ base: 12, xs: 6 }}>
             <Button
               component="a"
-              href={websiteUrl + `/register?r=${fullURL}`}
+              href={websiteUrl + `/${locale}/register?r=${fullURL}`}
               variant="filled"
               radius="md"
               fullWidth
@@ -61,7 +63,7 @@ export function SignupLogin({
         <Group justify="space-between" gap="sm" visibleFrom={visibleFrom}>
           <Button
             component="a"
-            href={websiteUrl + `/login?r=${fullURL}`}
+            href={websiteUrl + `/${locale}/login?r=${fullURL}`}
             variant="outline"
             radius="md"
             className={classes.outlinebutton}
@@ -72,7 +74,7 @@ export function SignupLogin({
             variant="filled"
             radius="md"
             component="a"
-            href={websiteUrl + `/register?r=${fullURL}`}
+            href={websiteUrl + `/${locale}/register?r=${fullURL}`}
           >
             {t.signUp}
           </Button>

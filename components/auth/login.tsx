@@ -25,6 +25,7 @@ import { API_URL, websiteUrl } from "@/config/config";
 import { checkAuthorizationa } from "@/api/Auth/checkAuthorizationa";
 import { postLogin } from "@/api/Auth/login";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { getCookie } from "cookies-next";
 
 export type AuthLanguage = {
   signUpForReturnone: string;
@@ -113,6 +114,7 @@ export function LoginComponentsModal({
   redirectUrl: string;
   setLoginOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const locale = getCookie("NEXT_LOCALE") || "en";
   const router = useRouter();
   // if post login and the process are loading
   const [loading, setLoading] = useState(false);
@@ -216,7 +218,7 @@ export function LoginComponentsModal({
               <Anchor
                 onClick={() => {
                   setLoginOpen(false);
-                  router.push(websiteUrl + "/register?r=" + redirectUrl);
+                  router.push(`/${locale}/register?r=` + redirectUrl);
                 }}
               >
                 {t.createOne}

@@ -40,7 +40,8 @@ import { TiWarning } from "react-icons/ti";
 import { theme } from "@/themes/theme";
 import { notifications } from "@mantine/notifications";
 import { DeleteQuesiton } from "@/api/question/deleteQuestion";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { websiteUrl } from "@/config/config";
 
 export function Anwser({
   questionDetill,
@@ -174,7 +175,7 @@ export function QuestionToolbar({
   locale: string;
 }) {
   const router = useRouter()
-  const usreId = getCookie("user_id");
+  const userId = getCookie("user_id");
 
   const [voteStatus, setVoteStatus] = useState(questionDetill.data.user_vote);
   const [newVote, setNewVote] = useState(0);
@@ -203,6 +204,7 @@ export function QuestionToolbar({
   });
 
 const DeleteQuestionFunction = async () => {
+
   const res = await DeleteQuesiton(questionDetill.data.id);
   if (res.status === 204) {
     notifications.show({
@@ -219,7 +221,7 @@ const DeleteQuestionFunction = async () => {
 };
 
   const DeleteQuestionCompents = () => {
-    if (usreId === questionDetill.data.questioner_id) {
+    if (userId === questionDetill.data.questioner_id) {
       return (
         <Menu.Item
           component="a"
@@ -236,6 +238,9 @@ const DeleteQuestionFunction = async () => {
   }
 
   const upVoteFunction = async () => {
+    if (!userId || userId == null){
+      return router.push(`/${locale}` + `/login?r=${window.location.href ? window.location.href : websiteUrl}`)
+    }
     if (voteStatus === 1) {
       return noVoteFunction();
     }
@@ -251,6 +256,9 @@ const DeleteQuestionFunction = async () => {
   };
 
   const downVoteFunction = async () => {
+    if (!userId || userId == null){
+      return router.push(`/${locale}` + `/login?r=${window.location.href ? window.location.href : websiteUrl}`)
+    }
     if (voteStatus === 2) {
       return noVoteFunction();
     }

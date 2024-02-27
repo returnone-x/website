@@ -2,7 +2,7 @@ const env = process.env.NODE_ENV
 import {Pathnames} from 'next-intl/navigation';
 
 export const API_URL = (env === "development" ? 'https://returnone.nightcat.xyz/api/v1': 'https://returnone.nightcat.xyz/api/v1')
-export const websiteUrl = (env === "development" ? 'https://returnone.nightcat.xyz/': 'https://returnone.nightcat.xyz/')
+export const websiteUrl = (env === "development" ? 'https://returnone.nightcat.xyz': 'https://returnone.nightcat.xyz')
 export const locales = ["en", "zh-tw"];
 
 export const pathnames = {

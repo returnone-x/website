@@ -25,7 +25,7 @@ import { QuestionAnswerUpVote } from "@/api/question/answer/questionAnsweUpVote"
 import { QuestionAnswerDownVote } from "@/api/question/answer/questionAnsweDownVote";
 import { DeleteQuestionAnswerVote } from "@/api/question/answer/deleteQuestionVote";
 import moment from "moment";
-import { TimeDisplay } from "@/config/config";
+import { TimeDisplay, websiteUrl } from "@/config/config";
 import { getCookie } from "cookies-next";
 import { modals } from "@mantine/modals";
 import { TiWarning } from "react-icons/ti";
@@ -40,6 +40,7 @@ import {
 import { DeleteQuestionAnswer } from "@/api/question/answer/deleteQuestionAnswer";
 import { notifications } from "@mantine/notifications";
 import { theme } from "@/themes/theme";
+import { useRouter } from "next/navigation";
 
 export type answersType = {
   id: string;
@@ -122,8 +123,9 @@ function AnswerToolbar({
   answerData: answersType;
   t: QuestionLanguage;
 }) {
-  const usreId = getCookie("user_id");
-
+  const router = useRouter()
+  const userId = getCookie("user_id");
+  const locale = getCookie("NEXT_LOCALE") || "en";
   const questionVoteCount = answerData.up_vote - answerData.down_vote;
 
   const [voteStatus, setVoteStatus] = useState(answerData.user_vote);
@@ -169,7 +171,7 @@ function AnswerToolbar({
   };
 
   const DeleteAnswerCompents = () => {
-    if (usreId === answerData.user_id) {
+    if (userId === answerData.user_id) {
       return (
         <Menu.Item
           component="a"
@@ -186,6 +188,9 @@ function AnswerToolbar({
   };
 
   const upVoteFunction = async () => {
+    if (!userId || userId == null){
+      return router.push(`/${locale}/login?r=${window.location.href ? window.location.href : websiteUrl}`)
+    }
     if (voteStatus === 1) {
       return noVoteFunction();
     }
@@ -201,6 +206,9 @@ function AnswerToolbar({
   };
 
   const downVoteFunction = async () => {
+    if (!userId || userId == null){
+      return router.push(`/${locale}/login?r=${window.location.href ? window.location.href : websiteUrl}`)
+    }
     if (voteStatus === 2) {
       return noVoteFunction();
     }

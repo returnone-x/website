@@ -1,6 +1,7 @@
 import { Question } from "@/components/question/list/list";
 import { Container } from "@mantine/core";
 import { useTranslations } from "next-intl";
+import { notFound } from "next/navigation";
 
 export default function QuestionList({
   searchParams,
@@ -27,10 +28,11 @@ export default function QuestionList({
   let query = "";
   const page = searchParams?.page;
   const tag = searchParams?.tag;
-
   if (page != undefined && tag != undefined) {
+    if (Number(page) < 1) return notFound() 
     query = `?page=${page}&tag=${tag}`;
   } else if (page != undefined) {
+    if (Number(page) < 1) return notFound() 
     query = `?page=${page}`;
   } else if (tag != undefined){
     query = `?tag=${tag}`;
@@ -39,7 +41,7 @@ export default function QuestionList({
   return (
     <>
       <Container size="xl">
-        <Question t={questionListTranslate} query={query} />
+        <Question t={questionListTranslate} query={query} page={page ? Number(page) : 1} tag={tag ? String(tag) : ""}/>
       </Container>
     </>
   );

@@ -283,7 +283,7 @@ export function SignupComponentsModal({
               <Anchor
                 onClick={() => {
                   setSignupOpen(false);
-                router.push(websiteUrl + "/login?r=" + redirectUrl);
+                router.push("/login?r=" + redirectUrl);
                 }}
               >
                 {t.logIn}
