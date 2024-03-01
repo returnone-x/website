@@ -1,7 +1,6 @@
 import { HeaderComponent } from "@/components/header/Header";
 import { Space } from "@mantine/core";
 import { useTranslations } from "next-intl";
-import { cookies } from "next/headers";
 import React from "react";
 
 export default function LocaleLayout({
@@ -19,7 +18,7 @@ export default function LocaleLayout({
     ask: t("ask"),
     logout: t("logout"),
     profile: t("profile"),
-    setting: t("setting")
+    setting: t("setting"),
   };
   return (
     <>

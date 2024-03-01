@@ -1,4 +1,4 @@
-import { Setting } from "@/components/setting/setting";
+import { Setting } from "@/components/user/setting/setting";
 
 export default function UserSetting() {
     return (<Setting></Setting>)
