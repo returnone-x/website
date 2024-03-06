@@ -27,54 +27,21 @@ export type HeaderLanguage = {
   blog: string;
   aboutUs: string;
   ask: string;
-  username: string;
-  password: string;
-  email: string;
-  confirmPassword: string;
-  typeUsername: string;
-  typePassword: string;
-  typeEmail: string;
-  signInToReturnone: string;
-  signUpForReturnone: string;
-  iAgreeTerms: string;
-  alreadyHaveAccount: string;
-  noAccount: string;
-  createOne: string;
-  orLoginWith: string;
-  orSignupWith: string;
-  invalidEmail: string;
-  passwordIsTooWeak: string;
-  passwordDidNotMatch: string;
-  invalidUsername: string;
-  usernameHasBeenUse: string;
-  emailHasBeenUse: string;
-  anUnexpectedErrorOccurred: string;
-  pleaseTryAgainLater: string;
-  pleaseEnterAUsername: string;
-  rename: string;
-  pleaseUpdateYourName: string;
-  successfulOauthSignup: string;
-  successfulOauthsignupMessage: string;
-  successfulLogin: string;
-  successfulLoginMessage: string;
-  invalidEmailOrPassword: string;
   logout: string;
   profile: string;
+  setting: string;
 };
 
 export async function HeaderComponent({
   t,
-  locale,
 }: {
   t: HeaderLanguage;
-  locale: string;
 }) {
   const cookieStore = cookies();
-  const accessToken = cookieStore.get("accessToken");
+  const refreshToken = cookieStore.get("refreshToken");
   const avatar = await getAvatar(
-    accessToken ? accessToken.name + "=" + accessToken.value : ""
+    refreshToken ? refreshToken.name + "=" + refreshToken.value : ""
   );
-
   const userAvatar =
     avatar != "" ? <UserAvatarDropdown t={t} avatar={avatar} /> : <></>;
   const SignLogin =
@@ -161,8 +128,8 @@ export async function HeaderComponent({
   );
 }
 
-async function getAvatar(accessToken: string) {
-  const res = await GetAvatarFromServerSide(accessToken);
+async function getAvatar(refreshToken: string) {
+  const res = await GetAvatarFromServerSide(refreshToken);
 
   if (res.status != 200) {
     return "";

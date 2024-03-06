@@ -32,6 +32,7 @@ export const theme = createTheme({
   other: {
     deepOrangeLight: "#E17900",
     deepOrangeDark: "#FC8C0C",
+    warn: "#FF8C00",
     deepBackground: "#212737",
     lightBackground: "#FFFFFF",
     heroHeight: rem(400),
@@ -45,9 +46,11 @@ export const resolver: CSSVariablesResolver = (theme) => ({
   light: {
     "--mantine-color-body": theme.other.lightBackground,
     "--mantine-color-deep-orange": theme.other.deepOrangeLight,
+    "--mantine-color-text": "#000000"
   },
   dark: {
     "--mantine-color-body": theme.other.deepBackground,
     "--mantine-color-deep-orange": theme.other.deepOrangeDark,
+    "--mantine-color-text": "#ffffff"
   },
 });

@@ -1,0 +1,15 @@
+.code-block {
+  position: relative;
+}
+
+.copy-button-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 14px;
+}
+
+.codeblock {
+  background-color: #ffffff;
+  border-radius: 10px; /* 你可以調整這個值以改變圓潤的程度 */
+}

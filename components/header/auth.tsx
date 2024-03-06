@@ -1,13 +1,13 @@
 "use client";
 
 import { useDisclosure } from "@mantine/hooks";
-import { LoginComponents } from "./login";
-import { SignupComponents } from "./signup";
 import { HeaderLanguage } from "./Header";
-import { useState } from "react";
-import { Avatar, Grid, Group } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { Avatar, Button, Grid, Group } from "@mantine/core";
 import { UserAvatarDropdown } from "./avatar";
-
+import classes from "./Header.module.css";
+import { websiteUrl } from "@/config/config";
+import { getCookie } from "cookies-next";
 // whole components
 export function SignupLogin({
   t,
@@ -16,11 +16,14 @@ export function SignupLogin({
   t: HeaderLanguage;
   visibleFrom: string;
 }) {
+  const locale = getCookie("NEXT_LOCALE") || "en";
+  const [fullURL, setFullURL] = useState(websiteUrl)
   const [avatar, setAvatar] = useState("");
-  const [signupOppened, { toggle: signupOpen, close: signupClose }] =
-    useDisclosure(false);
-  const [loginOppened, { toggle: loginOpen, close: loginClose }] =
-    useDisclosure(false);
+
+  useEffect(() => {
+    setFullURL(window.location.href)
+  }, [])
+
   if (avatar != "") {
     if (visibleFrom === "") {
       window.location.reload();
@@ -31,50 +34,50 @@ export function SignupLogin({
       return (
         <Grid hiddenFrom="sm">
           <Grid.Col span={{ base: 12, xs: 6 }}>
-            <LoginComponents
-              t={t}
-              loginOppened={loginOppened}
-              loginOpen={loginOpen}
-              loginClose={loginClose}
-              signupOpen={signupOpen}
-              setAvatar={setAvatar}
-              fullWidth={true}
-            />
+            <Button
+              component="a"
+              href={websiteUrl + `/${locale}/login?r=${fullURL}`}
+              variant="outline"
+              radius="md"
+              className={classes.outlinebutton}
+              fullWidth
+            >
+              {t.logIn}
+            </Button>
           </Grid.Col>
           <Grid.Col span={{ base: 12, xs: 6 }}>
-            <SignupComponents
-              t={t}
-              signupOppened={signupOppened}
-              signupOpen={signupOpen}
-              signupClose={signupClose}
-              loginOpen={loginOpen}
-              setAvatar={setAvatar}
-              fullWidth={true}
-            />
+            <Button
+              component="a"
+              href={websiteUrl + `/${locale}/register?r=${fullURL}`}
+              variant="filled"
+              radius="md"
+              fullWidth
+            >
+              {t.signUp}
+            </Button>
           </Grid.Col>
         </Grid>
       );
     } else {
       return (
         <Group justify="space-between" gap="sm" visibleFrom={visibleFrom}>
-          <LoginComponents
-            t={t}
-            loginOppened={loginOppened}
-            loginOpen={loginOpen}
-            loginClose={loginClose}
-            signupOpen={signupOpen}
-            setAvatar={setAvatar}
-            fullWidth={false}
-          />
-          <SignupComponents
-            t={t}
-            signupOppened={signupOppened}
-            signupOpen={signupOpen}
-            signupClose={signupClose}
-            loginOpen={loginOpen}
-            setAvatar={setAvatar}
-            fullWidth={false}
-          />
+          <Button
+            component="a"
+            href={websiteUrl + `/${locale}/login?r=${fullURL}`}
+            variant="outline"
+            radius="md"
+            className={classes.outlinebutton}
+          >
+            {t.logIn}
+          </Button>
+          <Button
+            variant="filled"
+            radius="md"
+            component="a"
+            href={websiteUrl + `/${locale}/register?r=${fullURL}`}
+          >
+            {t.signUp}
+          </Button>
         </Group>
       );
     }
