@@ -1,6 +1,6 @@
 "use client";
 import "@mantine/core/styles.css";
-import '@mantine/notifications/styles.css';
+import "@mantine/notifications/styles.css";
 import {
   MantineProvider,
   ColorSchemeScript,
@@ -29,7 +29,7 @@ export default function RootLayout({
         >
           <ModalsProvider>
             {children}
-            <Notifications />
+            <Notifications position="bottom-center" />
           </ModalsProvider>
         </MantineProvider>
       </body>

@@ -114,10 +114,6 @@ export function SignupComponentsModal({
   setRenameOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const router = useRouter();
-  const [
-    RenameModalStatus,
-    { toggle: RenameModalOpen, close: RenameModalClose },
-  ] = useDisclosure(false);
   // if post sign and the process are loading
   const [loading, setLoading] = useState(false);
 

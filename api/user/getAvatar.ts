@@ -1,14 +1,13 @@
 import { API_URL } from "@/config/config";
 import axios from "axios";
 
-export async function GetAvatarFromServerSide(cookies: string) {
+export async function GetAvatarFromServerSide(user_id: string) {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: API_URL + "/user/avatar",
+    url: API_URL + `/user/avatar/${user_id}`,
     headers: {
       "Content-Type": "application/json",
-      Cookie: cookies,
     },
     validateStatus: function () {
       return true;

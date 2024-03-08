@@ -38,10 +38,10 @@ export async function QuestionDetill({
   locale: string;
 }) {
   const cookieStore = cookies();
-  const refreshToken = cookieStore.get("accessToken");
+  const accessToken = cookieStore.get("accessToken");
   const questionDetill = await GetQuestionDetill(
     questionId,
-    refreshToken ? refreshToken.name + "=" + refreshToken.value : ""
+    accessToken ? accessToken.name + "=" + accessToken.value : ""
   );
   if (questionDetill === "") {
     return notFound();

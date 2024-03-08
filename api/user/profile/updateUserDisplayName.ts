@@ -1,22 +1,23 @@
 import { API_URL } from "@/config/config";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-export async function checkUsername(username: string) {
+export async function UpdateUserDisplayName(
+  display_name: string,
+) {
   let data = JSON.stringify({
-    username: username,
+    display_name: display_name,
   });
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: API_URL + "/auth/usernameexist",
+    url: API_URL + "/user/setting/reset/displayname",
     headers: {
       "Content-Type": "application/json",
     },
     data: data,
     validateStatus: function () {
-        return true;
+      return true;
     },
   };
-
-  return await axios.request(config)
+  return await axios.request(config);
 }
