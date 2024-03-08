@@ -1,63 +1,44 @@
 import { GetQuestions } from "@/api/question/getQuestions";
+import { GetUserDetil } from "@/api/user/profile/getUserDetil";
+import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { ProfileLayout } from "./profile";
 
-export type ListLanguage = {
-  views: string;
-  askAt: string;
-  votes: string;
-  online: string;
-  answers: string;
-  home: string;
-  hotQuestion: string;
-  tags: string;
-  saved: string;
-  yourQuestions: string;
-  yourAnswer: string;
-  history: string;
-  recommend: string;
-};
-
-export type Questions = {
-  id: string;
-  Questioner_id: string;
-  title: string;
-  content: string;
-  tags_name: string[];
-  tags_version: string[];
-  views: number;
-  create_at: string;
-  update_at: string;
-  questioner_name: string;
-  questioner_avatar: string;
-  vote_down: number;
-  vote_up: number;
-  answers: number;
-};
-
-export async function Question({
-  t,
-  query,
-  page,
-  tag,
-}: {
-  t: ListLanguage;
-  query: string;
-  page: number;
-  tag: string;
-}) {
-  const questionData = await getQuestions(query);
-  const questionsArray: Questions[] = questionData.data as Questions[];
-  const questionsNumber: number = questionData.questions_number as number;
-
-  return <QuestionListComponents t={t} questionsArray={questionsArray} questionsNumber={questionsNumber} page={page} tag={tag}/>;
+export type UserProfileSettingLanguage = {
+  invalidUsername: string,
+  usernameHasBeenUse: string,
+  pleaseEnterAUsername: string,
+  errorWhenUpdateUserAllName: string,
+  errorWhenUpdateUserAllNameTitle: string,
+  SuccessfulUpdateUserAllNameTitle: string,
 }
 
-async function getQuestions(query: string) {
-
-  const res = await GetQuestions(query);
-
-  if (res.status != 200) {
-    return [];
+export async function Profile({
+  t,
+}: {
+  t: UserProfileSettingLanguage;
+}) {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken");
+  const userSettingDetil = await GetQuestionDetill(
+    accessToken ? accessToken.name + "=" + accessToken.value : ""
+  );
+  if (userSettingDetil === "") {
+    return notFound();
   }
 
-  return res.data ;
+  return (
+    <>
+    <ProfileLayout userSettingDetil={userSettingDetil} t={t}></ProfileLayout>
+    </>
+  );
+}
+
+async function GetQuestionDetill(accessToken: string) {
+  const res = await GetUserDetil(accessToken);
+  if (res.status != 200) {
+    return "";
+  } else {
+    return res.data;
+  }
 }

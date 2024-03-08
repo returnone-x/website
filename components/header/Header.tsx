@@ -38,10 +38,8 @@ export async function HeaderComponent({
   t: HeaderLanguage;
 }) {
   const cookieStore = cookies();
-  const refreshToken = cookieStore.get("refreshToken");
-  const avatar = await getAvatar(
-    refreshToken ? refreshToken.name + "=" + refreshToken.value : ""
-  );
+  const user_id = cookieStore.get("user_id") || null
+  const avatar = user_id ? await getAvatar(user_id.value) : "";
   const userAvatar =
     avatar != "" ? <UserAvatarDropdown t={t} avatar={avatar} /> : <></>;
   const SignLogin =
@@ -128,8 +126,8 @@ export async function HeaderComponent({
   );
 }
 
-async function getAvatar(refreshToken: string) {
-  const res = await GetAvatarFromServerSide(refreshToken);
+async function getAvatar(user_id: any) {
+  const res = await GetAvatarFromServerSide(user_id);
 
   if (res.status != 200) {
     return "";

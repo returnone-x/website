@@ -99,5 +99,13 @@
     "yourAnswer": "Your Answer",
     "history": "History",
     "recommend": "Recommend"
+  },
+  "UserProfileSetting": {
+    "invalidUsername": "Username can only contain underscores(_),dot(.), numbers and letters, the first digit and the last digit can't be underscore or dot",
+    "usernameHasBeenUse": "This username has been used",
+    "pleaseEnterAUsername": "Please enter a username",
+    "errorWhenUpdateUserAllName": "Error update your name, please try again later",
+    "errorWhenUpdateUserAllNameTitle": "Error update your name",
+    "SuccessfulUpdateUserAllNameTitle": "Successful update your name"
   }
 }

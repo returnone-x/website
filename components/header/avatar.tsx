@@ -16,17 +16,6 @@ export function UserAvatarDropdown({
   t: HeaderLanguage;
   avatar: string;
 }) {
-  useEffect(() => {
-    const refreshTokenFunction = async () => {
-      const res = await refreshToken();
-      if (res.status != 200) {
-        window.location.reload();
-      }
-    };
-    setInterval(() => {
-      refreshTokenFunction();
-    }, 20 * 60 * 1000);
-  }, []);
   const logout = async () => {
     await getLogout();
     window.location.reload();
