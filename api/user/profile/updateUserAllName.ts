@@ -3,7 +3,7 @@ import axios from "axios";
 
 export async function UpdateUserAllName(
   username: string,
-  display_name: string,
+  display_name: string
 ) {
   let data = JSON.stringify({
     username: username,

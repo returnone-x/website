@@ -20,12 +20,12 @@ import { useForm } from "@mantine/form";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { UserProfileSettingLanguage } from "./profileGetData";
-import { UpdateUserAllName } from "@/api/user/profile/updateUserDetil";
 import { notifications } from "@mantine/notifications";
 import { HiCheckCircle, HiEmojiSad } from "react-icons/hi";
 import UserSetting from "@/app/[locale]/user/setting/page";
 import { UpdateUserDisplayName } from "@/api/user/profile/updateUserDisplayName";
 import { UpdateUsername } from "@/api/user/profile/updateUsername";
+import { UpdateUserAllName } from "@/api/user/profile/updateUserAllName";
 
 export function UserDisplayName({
   userSettingDetil,
@@ -55,7 +55,7 @@ export function UserDisplayName({
     validate: {
       // username cuz need update frequently so use this way (i know this is so stupid)
       username: (value) => (usernameError === "" ? null : usernameError),
-      displayName: (value) => (value.length > 50 ? null : null),
+      displayName: (value) => (value.length > 30 ? t.invalidDisplayName : null),
     },
   });
 
@@ -71,11 +71,8 @@ export function UserDisplayName({
     }
     // get api to check username is been use or not
     const res = await checkUsername(username);
-    if (
-      res.data.inuse &&
-      oldUsername !== userSettingform.values.username
-    ) {
-      console.log(res.data.inuse)
+    if (res.data.inuse && oldUsername !== userSettingform.values.username) {
+      console.log(res.data.inuse);
       userSettingform.setErrors({ username: t.usernameHasBeenUse });
       setUsernameError(t.usernameHasBeenUse);
     } else if (IsValidUsername(username)) {
@@ -88,61 +85,46 @@ export function UserDisplayName({
   };
 
   const updateAllUsername = async () => {
-    let isError = false;
     setLoading(true);
 
-    if (isError) {
-      setLoading(false);
+    let res = null;
+    if (oldDisplayName !== userSettingform.values.displayName) {
+      res = await UpdateUserDisplayName(userSettingform.values.displayName);
+      setOldDisplayName(userSettingform.values.displayName);
+    } else if (oldUsername !== userSettingform.values.username) {
+      res = await UpdateUsername(userSettingform.values.username);
+      setOldUsername(userSettingform.values.username);
     } else {
-      let res = null;
-      if (oldDisplayName !== userSettingform.values.displayName) {
-        res = await UpdateUserDisplayName(userSettingform.values.displayName);
-        setOldDisplayName(userSettingform.values.displayName);
-      } else if (oldUsername !== userSettingform.values.username) {
-        res = await UpdateUsername(userSettingform.values.username);
-        setOldUsername(userSettingform.values.username);
-      } else {
-        res = await UpdateUserAllName(
-          userSettingform.values.username,
-          userSettingform.values.displayName
-        );
-      }
-      if (res != null && res.status === 200) {
-        notifications.show({
-          color: "green",
-          title: t.SuccessfulUpdateUserAllNameTitle,
-          message: "",
-          icon: <HiCheckCircle size={30} />,
-          autoClose: 5000,
-        });
-      } else {
-        notifications.show({
-          color: "red",
-          title: t.errorWhenUpdateUserAllNameTitle,
-          message: t.errorWhenUpdateUserAllName + "\n" + res.data.error,
-          icon: <HiEmojiSad size={25} />,
-          autoClose: 5000,
-        });
-      }
-      setLoading(false);
+      res = await UpdateUserAllName(
+        userSettingform.values.username,
+        userSettingform.values.displayName
+      );
     }
+    if (res != null && res.status === 200) {
+      notifications.show({
+        color: "green",
+        title: t.successfulUpdateUserAllNameTitle,
+        message: "",
+        icon: <HiCheckCircle size={30} />,
+        autoClose: 5000,
+      });
+    } else {
+      notifications.show({
+        color: "red",
+        title: t.errorUpdateUserAllNameTitle,
+        message: t.errorUpdateUserAllName + "\n" + res.data.error,
+        icon: <HiEmojiSad size={25} />,
+        autoClose: 5000,
+      });
+    }
+    setDisableButton(true);
+    setLoading(false);
   };
 
   useEffect(() => {
     if (
       oldUsername !== userSettingform.values.username ||
-      oldDisplayName !== userSettingform.values.displayName
-    ) {
-      setDisableButton(false);
-    } else {
-      setDisableButton(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userSettingform.values.displayName]);
-
-  useEffect(() => {
-    fetchCheckUsername();
-    if (
+      oldDisplayName !== userSettingform.values.displayName ||
       oldUsername !== userSettingform.values.username ||
       oldDisplayName !== userSettingform.values.displayName
     ) {
@@ -151,7 +133,12 @@ export function UserDisplayName({
       setDisableButton(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userSettingform.values.username]);
+  }, [userSettingform.values.displayName, userSettingform.values.username]);
+
+  useEffect(() => {
+    fetchCheckUsername();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username]);
   return (
     <>
       <form
@@ -163,22 +150,20 @@ export function UserDisplayName({
           <TextInput
             label={
               <Text size="md" fw={700}>
-                Display name
+                {t.displayName}
               </Text>
             }
-            defaultValue={userSettingDetil.data.display_name}
-            placeholder="Display name"
+            placeholder={t.displayName}
             disabled={loading}
             {...userSettingform.getInputProps("displayName")}
           />
           <TextInput
             label={
               <Text size="md" fw={700}>
-                Username
+                {t.username}
               </Text>
             }
-            defaultValue={userSettingDetil.data.username}
-            placeholder="Your usrename"
+            placeholder={t.username}
             disabled={loading}
             {...userSettingform.getInputProps("username")}
           />
@@ -191,11 +176,9 @@ export function UserDisplayName({
               size="sm"
               type="submit"
               loading={loading}
-              disabled={
-                disableButton ? true : false
-              }
+              disabled={disableButton ? true : false}
             >
-              Save
+              {t.save}
             </Button>
           </div>
         </Stack>
